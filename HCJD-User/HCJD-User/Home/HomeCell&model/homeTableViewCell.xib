@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="395" id="KGk-i7-Jjw" customClass="homeTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="650" height="395"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <frame key="frameInset" width="650" height="395"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zYI-3f-h4m">
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="a" translatesAutoresizingMaskIntoConstraints="NO" id="sGR-qD-XvF"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="奥迪A6/红色" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXW-PH-wwa">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="Mbc-xg-qGw"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="定金:¥200" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i2d-UT-DiW">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.30340515610000002" blue="0.27959298690000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="hXW-PH-wwa" secondAttribute="bottom" id="0PX-RX-dlu"/>
+                            <constraint firstItem="sGR-qD-XvF" firstAttribute="top" secondItem="zYI-3f-h4m" secondAttribute="top" id="1Va-7f-J4u"/>
+                            <constraint firstAttribute="trailing" secondItem="i2d-UT-DiW" secondAttribute="trailing" constant="10" id="CVo-6d-Qs3"/>
+                            <constraint firstAttribute="trailing" secondItem="sGR-qD-XvF" secondAttribute="trailing" id="DAe-x8-Wva"/>
+                            <constraint firstAttribute="bottom" secondItem="i2d-UT-DiW" secondAttribute="bottom" id="IO3-Ni-EqY"/>
+                            <constraint firstItem="i2d-UT-DiW" firstAttribute="top" secondItem="sGR-qD-XvF" secondAttribute="bottom" id="PZv-rR-XQ6"/>
+                            <constraint firstItem="sGR-qD-XvF" firstAttribute="leading" secondItem="zYI-3f-h4m" secondAttribute="leading" id="UrV-1B-bJF"/>
+                            <constraint firstAttribute="bottom" secondItem="sGR-qD-XvF" secondAttribute="bottom" constant="50" id="m96-1G-eZ6"/>
+                            <constraint firstItem="i2d-UT-DiW" firstAttribute="leading" secondItem="hXW-PH-wwa" secondAttribute="trailing" id="nev-H3-UM1"/>
+                            <constraint firstItem="hXW-PH-wwa" firstAttribute="leading" secondItem="zYI-3f-h4m" secondAttribute="leading" constant="10" id="pHx-SY-fld"/>
+                            <constraint firstItem="hXW-PH-wwa" firstAttribute="top" secondItem="sGR-qD-XvF" secondAttribute="bottom" id="xud-GE-uDV"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" red="0.95684773489932884" green="0.95918099832214765" blue="0.95889261744966447" alpha="1" colorSpace="calibratedRGB"/>
+                <constraints>
+                    <constraint firstItem="zYI-3f-h4m" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Ld8-qd-QVJ"/>
+                    <constraint firstItem="zYI-3f-h4m" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="aK8-LE-Ban"/>
+                    <constraint firstAttribute="bottom" secondItem="zYI-3f-h4m" secondAttribute="bottom" constant="10" id="ak2-jm-eJk"/>
+                    <constraint firstAttribute="trailing" secondItem="zYI-3f-h4m" secondAttribute="trailing" id="wkB-gX-MF8"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="carImageView" destination="sGR-qD-XvF" id="XQI-kL-phv"/>
+                <outlet property="carTypeLabel" destination="hXW-PH-wwa" id="g1h-4p-Bij"/>
+                <outlet property="moneyLabel" destination="i2d-UT-DiW" id="B0v-he-Mb4"/>
+            </connections>
+            <point key="canvasLocation" x="198" y="16.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="a" width="320" height="199"/>
+    </resources>
+</document>
