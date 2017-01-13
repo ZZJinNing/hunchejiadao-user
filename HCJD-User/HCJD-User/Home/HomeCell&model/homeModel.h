@@ -19,4 +19,8 @@
 //定金
 @property (nonatomic,copy)NSString *money;
 
+
+//ID
+@property (nonatomic,copy)NSString *carID;
+
 @end

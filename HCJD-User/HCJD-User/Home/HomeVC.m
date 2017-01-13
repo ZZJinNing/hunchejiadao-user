@@ -8,26 +8,36 @@
 
 #import "HomeVC.h"
 #import "homeModel.h"
+#import "homeTaocanModel.h"
 #import "homeModelGroup.h"
 #import "homeTableViewCell.h"
+#import "homeTaoCanTableViewCell.h"
 #import "HomeDetailViewController.h"
 #import "CarCollectionView.h"
 #import "MyTeamViewController.h"
 #import "CityViewController.h"
+#import "TaoCanDetailViewController.h"
 @interface HomeVC ()<UITableViewDelegate,UITableViewDataSource>
 {
     UITableView *_tableView;
     NSMutableArray *_dataSource;
-    //第一个头视图的View
+    //==========第一个头视图的View==================
     UIView *_fristHeaderView;
-    //第二个透视图的View
-    UIView *_secondHeaderView;
-  
     //城市选择
     UILabel *_mapLabel;
+    //城市
+    NSString *_cityName;
+    //背景图
+    NSString *_bgImageStr;
+    //行程
+    NSString *_liChengStr;
     
+    //==========第二个头视图的View=================
+    UIView *_secondHeaderView;
     
-    
+    //数据源为空的时候创建的一个视图
+    UIView *_emptyView;
+  
 }
 @end
 
@@ -37,20 +47,24 @@
     [super viewDidLoad];
     
     _dataSource = [[NSMutableArray alloc]init];
+    _emptyView = [[UIView alloc]init];
     
     
     //创建tableView
     [self createTableView];
     [self getDataSource];
-    
     //收藏车的数量
     [self carCollection];
     
 }
-
-
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 #pragma mark - 收藏车的数量
@@ -79,27 +93,97 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.backgroundColor = kRGB(245, 245, 245);
-    _tableView.rowHeight = kScreenWidth/3*2;
     _tableView.separatorStyle = UITableViewCellSelectionStyleNone;
+    
     [_tableView registerNib:[UINib nibWithNibName:@"homeTableViewCell" bundle:nil] forCellReuseIdentifier:@"homeCell"];
+    [_tableView registerNib:[UINib nibWithNibName:@"homeTaoCanTableViewCell" bundle:nil] forCellReuseIdentifier:@"homeTaocanCell"];
+    
     [self.view addSubview:_tableView];
  
 }
 
 #pragma mark - 数据源
 - (void)getDataSource{
-    for (int i = 0; i < 2; i++) {
-        homeModelGroup *group = [[homeModelGroup alloc]init];
-        for (int j = 0; j < 5; j++) {
-            homeModel *model = [[homeModel alloc]init];
-            model.money = [NSString stringWithFormat:@"定金:¥2%d%d",j,j];
-            [group.carModelGroup addObject:model];
+
+    [[MNDownLoad shareManager]POST:@"indexData" param:nil success:^(NSDictionary *dic) {
+        NSLog(@"%@",dic);
+    
+        _bgImageStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"ad_info"][@"image"]];
+        _liChengStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"mile_total"]];
+        _cityName = [NSString stringWithFormat:@"%@",dic[@"return"][@"city_name"]];
+        //===========产品推荐=============
+        NSArray *product_list = dic[@"return"][@"product_list"];
+        if (kArrayIsEmpty(product_list)) {
+            [self crateEmptyView];
+            [_tableView reloadData];
+            return ;
+        }else{
+            [_emptyView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            _emptyView.frame = CGRectMake(0, 0, 0, 0);
         }
+        
+        homeModelGroup *groupModel1 = [[homeModelGroup alloc]init];
+        for (NSDictionary *productDic in product_list) {
+            homeModel *model = [[homeModel alloc]init];
+            model.imageCar = [NSString stringWithFormat:@"%@",productDic[@"image"]];
+            model.carID = [NSString stringWithFormat:@"%@",productDic[@"_id"]];
+            model.carType = [NSString stringWithFormat:@"%@",productDic[@"name"]];
+            model.money = [NSString stringWithFormat:@"定金：¥%@",productDic[@"price_front"]];
+            [groupModel1.carModelGroup addObject:model];
+        }
+        //===========产品套餐推荐=============
+        NSArray *group_list = dic[@"return"][@"group_list"];
+        
+        homeModelGroup *groupModel2 = [[homeModelGroup alloc]init];
+        
+        for (NSDictionary *groupDic in group_list) {
+
+            homeTaocanModel *model = [[homeTaocanModel alloc]init];
+            model.carImageStr = [NSString stringWithFormat:@"%@",groupDic[@"image"]];
+            model.moneyStr = [NSString stringWithFormat:@"定金：¥%@",groupDic[@"price_front"]];
+            model.CarId = [NSString stringWithFormat:@"%@",groupDic[@"_id"]];
+            //============头车================
+            NSDictionary *headerCarDic = groupDic[@"header_car"];
+            //头车名称
+            NSString *headerCarName = headerCarDic[@"car_brand_name"];
+            //头车颜色
+            NSString *headerCarColor = headerCarDic[@"car_color_name"];
+            //头车系列
+            NSString *headerCarSeries = headerCarDic[@"car_series_name"];
+            //头车数量
+            NSString *headerNum = [NSString stringWithFormat:@"%@",headerCarDic[@"is_header"]];
+            //====拼接头车各种属性=====
+            model.headerCarStr = [NSString stringWithFormat:@"%@%@%@x%@/辆",headerCarName,headerCarSeries,headerCarColor,headerNum];
+            
+            //============跟车===========================
+            NSDictionary *followCarDic = groupDic[@"follow_car"];
+            //跟车名称
+            NSString *genCarName = followCarDic[@"car_brand_name"];
+            //跟车系列
+            NSString *genSeries = followCarDic[@"car_series_name"];
+            //跟车颜色
+            NSString *genColor = followCarDic[@"car_color_name"];
+            //跟车数量
+            NSString *genNum = [NSString stringWithFormat:@"%@",followCarDic[@"product_num"]];
+            //拼接各种属性
+            model.genCarStr = [NSString stringWithFormat:@"%@%@%@x%@/辆",genCarName,genSeries,genColor,genNum];
        
-        [_dataSource addObject:group];
-    }
-   
-    [_tableView reloadData];
+            [groupModel2.carModelGroup addObject:model];
+        }
+        [_dataSource addObject:groupModel1];
+        [_dataSource addObject:groupModel2];
+      
+        [_tableView reloadData];
+        
+    } failure:^(NSError *error) {
+        
+    } withSuperView:self];
+    
+    
+    
+    
+    
+    
 }
 
 
@@ -109,46 +193,89 @@
 //返回指定的组数,如果是多组，必须实现这个方法，返回指定组数，如果是一组，这个方法可以不实现，默认是一组
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    
     return _dataSource.count;
 }
 //返回指定组的行数
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    //首先根据组号取出组模型
     homeModelGroup * carGroup = _dataSource[section];
     //根据组模型中的数组的个数返回行数
     return carGroup.carModelGroup.count;
-    
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   homeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"homeCell" forIndexPath:indexPath];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    //首先根据组号拿出组模型
-    homeModelGroup * carGroup = _dataSource[indexPath.section];
-    //再根据行号拿出汽车对象
-    homeModel * car = carGroup.carModelGroup[indexPath.row];
+    
+    
     if (indexPath.section == 0) {
-        cell.carImageView.image = [UIImage imageNamed:@"a"];
+        
+        homeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"homeCell" forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //首先根据组号拿出组模型
+        homeModelGroup * groupModel = _dataSource[indexPath.section];
+        //再根据行号拿出汽车对象
+        homeModel * model = groupModel.carModelGroup[indexPath.row];
+        cell.carTypeLabel.text = model.carType;
+        [cell.carImageView sd_setImageWithURL:[NSURL URLWithString:model.imageCar] placeholderImage:[UIImage imageNamed:@"placeHold"]];
+        cell.moneyLabel.text = model.money;
+        
+        return cell;
+        
+    }else if(indexPath.section == 1){
+        
+        homeTaoCanTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"homeTaocanCell" forIndexPath:indexPath];
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //首先根据组号拿出组模型
+        homeModelGroup * groupModel = _dataSource[indexPath.section];
+        //再根据行号拿出汽车对象
+        homeTaocanModel * model = groupModel.carModelGroup[indexPath.row];
+        [cell.carImageView sd_setImageWithURL:[NSURL URLWithString:model.carImageStr] placeholderImage:[UIImage imageNamed:@"placeHold"]];
+        cell.headerCarLAbel.text = model.headerCarStr;
+        cell.genCarLabel.text = model.genCarStr;
+        cell.moneyLabel.text = model.moneyStr;
+        
+        
+        return cell;
     }else{
-        cell.carImageView.image = [UIImage imageNamed:@"b"];
+        return nil;
     }
+
+    
    
-    
-    cell.moneyLabel.text = car.money;
-    
-    
-    return cell;
 }
 
-
+//动态指定某一个cell的高度
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        return kScreenWidth + 60;
+    }else{
+        return kScreenWidth + 100;
+    }
+  
+}
 #pragma mark - 选中事件
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    HomeDetailViewController *vc = [[HomeDetailViewController alloc]init];
+    if (indexPath.section == 0) {
+        //首先根据组号拿出组模型
+        homeModelGroup * groupModel = _dataSource[indexPath.section];
+        //再根据行号拿出汽车对象
+        homeModel * model = groupModel.carModelGroup[indexPath.row];
+        HomeDetailViewController *vc = [[HomeDetailViewController alloc]init];
+        vc.orderID = model.carID;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else{
+        //首先根据组号拿出组模型
+        homeModelGroup * groupModel = _dataSource[indexPath.section];
+        homeTaocanModel *model = groupModel.carModelGroup[indexPath.row];
+        
+        NSLog(@"-------------");
+    }
     
-    [self.navigationController pushViewController:vc animated:YES];
+    
+   
    
 }
 
@@ -158,10 +285,12 @@
 //动态指定组头部高度
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    
     if (section == 0) {
         return kScreenWidth/3*2+(kScreenWidth - 60)/6.2+30+50;
     }
-    return 100;
+    return kScreenWidth/3.5 + 20;
+    
 }
 #pragma mark - 组头视图和尾视图
 //设置视图后标题无效
@@ -183,10 +312,9 @@
 
 #pragma mark - 布局上部头部视图
 - (void)topView:(UIView*)view{
-    
     //背景视图
     UIImageView *topImageView = [[UIImageView alloc]init];
-    topImageView.image = [UIImage imageNamed:@"backg"];
+    [topImageView sd_setImageWithURL:[NSURL URLWithString:_bgImageStr] placeholderImage:[UIImage imageNamed:@"placeHold"]];
     topImageView.userInteractionEnabled = YES;
     [view addSubview:topImageView];
     topImageView.sd_layout
@@ -226,7 +354,8 @@
     _mapLabel.textAlignment = NSTextAlignmentRight;
     _mapLabel.textColor = [UIColor whiteColor];
     _mapLabel.font = [UIFont systemFontOfSize:19];
-    _mapLabel.text = @"郑州";
+    _mapLabel.text = _cityName;
+    _mapLabel.adjustsFontSizeToFitWidth = YES;
     [dingweiView addSubview:_mapLabel];
     _mapLabel.sd_layout
     .rightSpaceToView(dingweiView,10)
@@ -241,7 +370,7 @@
     kefuImageView.image = [UIImage imageNamed:@"icon_kf"];
     [topImageView addSubview:kefuImageView];
     kefuImageView.sd_layout
-    .rightSpaceToView(topImageView,10)
+    .rightSpaceToView(topImageView,20)
     .topSpaceToView(topImageView,30)
     .widthIs(30)
     .heightIs(24);
@@ -264,7 +393,7 @@
     
     UILabel *label2 = [[UILabel alloc]init];
     label2.textColor = [UIColor whiteColor];
-    label2.text = @"1000km";
+    label2.text = [NSString stringWithFormat:@"%@KM",_liChengStr];
     label2.font = [UIFont systemFontOfSize:18];
     label2.textAlignment = NSTextAlignmentRight;
     [topImageView addSubview:label2];
@@ -364,12 +493,13 @@
 //========单点城市定位选则================
 - (void)tapHandleDingWei{
     CityViewController *vc = [[CityViewController alloc]init];
-    [self.navigationController pushViewController:vc animated:YES];
-    
-    [vc chuanZhi:^(NSString *str) {
-        _mapLabel.text = str;
+    vc.cityTitle = _cityName;
+    [vc chuanZhi:^{
+        _dataSource = [[NSMutableArray alloc]init];
+        [self getDataSource];
     }];
-    
+    [self.navigationController pushViewController:vc animated:YES];
+  
 }
 //======单点客服========================
 - (void)tapHandleKeFu{
@@ -395,13 +525,13 @@
 #pragma mark - 婚车套餐推荐
 - (void)taoCanTuiJian:(UIView*)view{
     UIImageView *topImageView = [[UIImageView alloc]init];
-    topImageView.image = [UIImage imageNamed:@"backg"];
+    topImageView.image = [UIImage imageNamed:@"banner"];
     [view addSubview:topImageView];
     topImageView.sd_layout
     .topSpaceToView(view,-20)
     .leftSpaceToView(view,0)
     .rightSpaceToView(view,0)
-    .heightIs(80);
+    .heightIs(kScreenWidth/3.5);
     
     
     //============婚车推荐  查看更多按钮==================
@@ -427,7 +557,7 @@
     .widthIs(28);
     
     UILabel *tuijianLabel = [[UILabel alloc]init];
-    tuijianLabel.text = @"婚车推荐";
+    tuijianLabel.text = @"套餐推荐";
     tuijianLabel.textColor = kRGB(240, 50, 50);
     [moreView addSubview:tuijianLabel];
     tuijianLabel.sd_layout
@@ -456,6 +586,79 @@
     self.tabBarController.selectedIndex = 1;
 }
 
+
+#pragma mark - 数据源为空的时候
+- (void)crateEmptyView{
+    _emptyView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+    _emptyView.backgroundColor = kRGB(245, 245, 245);;
+    [self.view addSubview:_emptyView];
+    
+    
+    
+    //最上边的视图
+    UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenWidth/3*2+(kScreenWidth - 60)/6.2+30+50)];
+    [_emptyView addSubview:topView];
+    [self topView:topView];
+    
+    //============婚车推荐  查看更多按钮==================
+    UIView *taocanView = [[UIView alloc]init];
+    [_emptyView addSubview:taocanView];
+    taocanView.sd_layout
+    .topSpaceToView(topView,10)
+    .leftSpaceToView(_emptyView,0)
+    .rightSpaceToView(_emptyView,0)
+    .heightIs(40);
+    
+    [self taoCanView:taocanView];
+    
+    
+}
+
+- (void)taoCanView:(UIView*)view{
+    UIView *moreView = [[UIView alloc]init];
+    moreView.backgroundColor = [UIColor whiteColor];
+    [view addSubview:moreView];
+    moreView.sd_layout
+    .bottomSpaceToView(view,0)
+    .leftSpaceToView(view,0)
+    .rightSpaceToView(view,0)
+    .heightIs(40);
+    UITapGestureRecognizer * moretgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHandtaocanmore)];
+    [moreView addGestureRecognizer:moretgr];
+    
+    //点赞图片
+    UIImageView *dianzanImageView = [[UIImageView alloc]init];
+    dianzanImageView.image = [UIImage imageNamed:@"icon_recommend"];
+    [moreView addSubview:dianzanImageView];
+    dianzanImageView.sd_layout
+    .leftSpaceToView(moreView,10)
+    .topSpaceToView(moreView,6)
+    .bottomSpaceToView(moreView,6)
+    .widthIs(28);
+    
+    UILabel *tuijianLabel = [[UILabel alloc]init];
+    tuijianLabel.text = @"套餐推荐";
+    tuijianLabel.textColor = kRGB(240, 50, 50);
+    [moreView addSubview:tuijianLabel];
+    tuijianLabel.sd_layout
+    .leftSpaceToView(dianzanImageView,8)
+    .centerYEqualToView(moreView)
+    .widthIs(150)
+    .heightIs(20);
+    
+    UILabel *moreLabel = [[UILabel alloc]init];
+    moreLabel.textColor = wordColorDark;
+    moreLabel.text = @"查看更多";
+    moreLabel.textAlignment = NSTextAlignmentRight;
+    moreLabel.font = [UIFont systemFontOfSize:15];
+    [moreView addSubview:moreLabel];
+    moreLabel.sd_layout
+    .rightSpaceToView(moreView,15)
+    .centerYEqualToView(moreView)
+    .heightIs(20)
+    .widthIs(150);
+
+}
 
 
 

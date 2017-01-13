@@ -10,5 +10,9 @@
 #import "ProductGroupModel.h"
 
 @interface TaoCanDetailViewController : UIViewController
+
 @property(nonatomic,retain)ProductGroupModel *productGroupModel;
+
+
+
 @end
