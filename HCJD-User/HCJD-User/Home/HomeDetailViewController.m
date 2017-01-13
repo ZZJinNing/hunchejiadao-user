@@ -40,6 +40,7 @@
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
    
+    
 }
 
 - (void)viewDidLoad {
@@ -50,6 +51,7 @@
     _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-124)];
     _scrollView.backgroundColor = grayBG;
     [self.view addSubview:_scrollView];
+   
     
     //头部视图
     [self topView];

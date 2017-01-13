@@ -10,4 +10,7 @@
 
 @interface HomeDetailViewController : UIViewController
 
+//订单ID
+@property (nonatomic,copy)NSString *orderID;
+
 @end

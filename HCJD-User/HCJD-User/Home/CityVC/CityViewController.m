@@ -8,11 +8,14 @@
 //
 
 #import "CityViewController.h"
-
+#import "cityModel.h"
 @interface CityViewController ()
 {
     //当前城市
     UILabel *_cityLabel;
+    //数据源
+    NSMutableArray *_cityArray;
+    
 }
 @end
 
@@ -23,14 +26,33 @@
     self.navigationItem.title = @"城市选择";
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     self.view.backgroundColor = grayBG;
-
+     UIBarButtonItem * item1 = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
+    self.navigationItem.leftBarButtonItem = item1;
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    
+    _cityArray = [[NSMutableArray alloc]init];
     
     //当前城市
     [self currentCity];
-    //已开通城市
-    [self openCity];
+    
+    //获取已开通的所有城市
+    [self getOpenCityDataSource];
     
 }
+
+//重写返回的方法
+- (void)back{
+    
+    if (self.MyBlock != nil) {
+        self.MyBlock();
+    }
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)chuanZhi:(NewBlock)block{
+    self.MyBlock = block;
+}
+
 
 
 //当前城市
@@ -40,15 +62,54 @@
     [self.view addSubview:bgView];
 
     _cityLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 500, 50)];
-    _cityLabel.text = @"当前城市：郑州";
+    _cityLabel.text = [NSString stringWithFormat:@"当前城市：%@",self.cityTitle];
     _cityLabel.textColor = wordColorDark;
     [bgView addSubview:_cityLabel];
     
 }
 
+#pragma mark - 获取已开通的所有城市
+- (void)getOpenCityDataSource{
+    NSString *url = @"cityOpenAll";
+    
+    [[MNDownLoad shareManager]POST:url param:nil success:^(NSDictionary *dic) {
+        NSString *info = dic[@"info"];
+        NSString *status = [NSString stringWithFormat:@"%@",dic[@"status"]];
+        if ([status integerValue] == 1) {
+            NSArray *returnArray = dic[@"return"];
+            for (NSDictionary *returnDic in returnArray) {
+                cityModel *model = [[cityModel alloc]init];
+                model.city = [NSString stringWithFormat:@"%@",returnDic[@"city"]];
+                model.city_id = [NSString stringWithFormat:@"%@",returnDic[@"city_id"]];
+                [_cityArray addObject:model];
+            }
+            //已开通城市
+            [self openCity];
+   
+        }else{
+            [MBProgressHUD showSuccess:info toView:self.view];
+        }
+        
+        
+        
+        
+    } failure:^(NSError *error) {
+        
+    } withSuperView:self];
+}
+
+
 //已开通城市
 - (void)openCity{
-    UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 70, kScreenWidth, 100)];
+    NSInteger allNum;
+    NSInteger num = _cityArray.count/3;
+    NSInteger num1 = _cityArray.count%3;
+    if (num1 > 0) {
+        allNum = num + 1;
+    }else{
+        allNum = num;
+    }
+    UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 70, kScreenWidth, 50 + 50 * allNum)];
     bgView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:bgView];
     
@@ -68,35 +129,74 @@
 }
 
 - (void)crateCityButtonWithView:(UIView*)view{
-    NSArray *array = @[@"郑州",@"厦门"];
-    float width = kScreenWidth/3;
-    for (int i = 0; i < 2; i++) {
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setTitle:array[i] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(selectCity:) forControlEvents:UIControlEventTouchUpInside];
-        button.tag = 100+i;
-        [button setTitleColor:wordColorDark forState:UIControlStateNormal];
-        button.frame = CGRectMake(width*i, 50, width, 50);
-        button.layer.borderWidth = 1;
-        button.layer.borderColor = [[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1] CGColor];
-        [view addSubview:button];
+    NSInteger flag = 0;
+    
+    NSInteger num = _cityArray.count/3;
+    NSInteger num1 = _cityArray.count%3;
+   
+    if (_cityArray.count < 3) {
+        for (int i = 0; i < 2; i++) {
+            [self createCityButtonWithI:i withJ:0 with:flag withView:view];
+            flag++;
+        }
+    }else{
+       
+        for (int j = 0; j < num; j++) {
+            for (int i = 0; i < 3; i++) {
+                [self createCityButtonWithI:i withJ:j with:flag withView:view];
+                flag++;
+            }
+        }
+        
+        for (int k = 0; k < num1; k++) {
+            [self createCityButtonWithI:k withJ:num with:flag withView:view];
+            flag++;
+        }
+        
         
     }
-  
+
 }
+
+- (void)createCityButtonWithI:(NSInteger)i withJ:(NSInteger)j with:(NSInteger)flag withView:(UIView*)view{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    cityModel *model = _cityArray[flag];
+    [button setTitle:model.city forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(selectCity:) forControlEvents:UIControlEventTouchUpInside];
+    button.tag = 100+i;
+    [button setTitleColor:wordColorDark forState:UIControlStateNormal];
+    float width = kScreenWidth/3;
+    button.frame = CGRectMake(width*i, 50+50*j, width, 50);
+    button.layer.borderWidth = 1;
+    button.layer.borderColor = [[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1] CGColor];
+    [view addSubview:button];
+}
+
+
 - (void)selectCity:(UIButton*)button{
-    _cityLabel.text = [NSString stringWithFormat:@"当前城市：%@",button.titleLabel.text];
-    
-    if (self.MyBlock != nil) {
-        self.MyBlock(button.titleLabel.text);
-    }
-
-    [self.navigationController popViewControllerAnimated:YES];
+    NSInteger flag = button.tag - 100;
+    //手动切换城市
+    [self SwitchTheCityWithFlag:flag];
 }
-
-
-- (void)chuanZhi:(NewBlock)block{
-    self.MyBlock = block;
+#pragma mark - 手动切换城市
+- (void)SwitchTheCityWithFlag:(NSInteger)flag{
+    cityModel *model = _cityArray[flag];
+    NSDictionary *param = @{@"city_id":model.city_id};
+    [[MNDownLoad shareManager]POST:@"switchCity" param:param success:^(NSDictionary *dic) {
+        NSString *info = dic[@"info"];
+        NSString *status = [NSString stringWithFormat:@"%@",dic[@"status"]];
+        if ([status integerValue] == 1) {
+            _cityLabel.text = [NSString stringWithFormat:@"当前城市：%@",dic[@"return"][@"city"]];
+        }else{
+            [MBProgressHUD showSuccess:info toView:self.view];
+        }
+        
+        
+    } failure:^(NSError *error) {
+        
+    } withSuperView:self];
+    
+    
 }
 
 
