@@ -44,7 +44,7 @@
     //定金
     self.advanceMoneyLabel.text = [NSString stringWithFormat:@"定金:￥%@",groupModel.price_front];
     //车名
-    self.headCarLabel.text = [NSString stringWithFormat:@"%@X1/辆",groupModel.name];
+    self.headCarLabel.text = [NSString stringWithFormat:@"%@",groupModel.header_car];
     //优惠价
     self.youhuiLabel.text = [NSString stringWithFormat:@"￥%@",groupModel.price_total];
     //市场价

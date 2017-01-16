@@ -53,6 +53,9 @@
     
     //车队数量
     CarCollectionView *_carView;
+    
+    //车队数量
+    NSInteger cart_num;
 }
 @end
 
@@ -221,7 +224,9 @@
     [param setObject:_productModel._id forKey:@"product_id"];
     [param setObject:@"product" forKey:@"type"];
     [_downLoad POST:@"collectSwitch" param:param success:^(NSDictionary *dic) {
+        
         NSLog(@"%@",dic);
+        
     } failure:^(NSError *error) {
         
     } withSuperView:self];
@@ -303,7 +308,6 @@
     
 }
 
-
 #pragma mark--===加===
 - (void)addButton{
     _number++;
@@ -376,8 +380,11 @@
     bgView.backgroundColor = grayBG;
     [self.view addSubview:bgView];
     
+    NSString *cartNum = [[NSUserDefaults standardUserDefaults]objectForKey:HCJDCart_num];
     
-    _carView = [[CarCollectionView alloc]initWithFrame:CGRectMake(0, 0, 80, 60) withNumber:1];
+    cart_num = [cartNum integerValue];
+    
+    _carView = [[CarCollectionView alloc]initWithFrame:CGRectMake(0, 0, 80, 60) withNumber:cart_num];
     [bgView addSubview:_carView];
     //添加点击事件
     UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handle)];
@@ -446,8 +453,11 @@
                 [_downLoad POST:@"cartAddProduct" param:param success:^(NSDictionary *dic) {
                     
                     //修改车队数量
-                    NSString *car_num = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
-                    _carView.numberLable.text = [NSString stringWithFormat:@"%@",car_num];
+                    NSString *cart_numStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
+                    NSInteger cartTotal = [cart_numStr integerValue];
+                    _carView.numberLable.text = [NSString stringWithFormat:@"%ld",(long)cartTotal];
+                    //保存车队数量
+                    [[NSUserDefaults standardUserDefaults]setObject:cart_numStr forKey:HCJDCart_num];
                     
                     //修改成功提示
                     UIAlertView *OKAlert = [[UIAlertView alloc]initWithTitle:@"修改成功" message:@"" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
@@ -463,8 +473,12 @@
             [self presentViewController:alert animated:YES completion:nil];
         }else if (status == 1){
             //修改车队数量
-            NSString *car_num = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
-            _carView.numberLable.text = [NSString stringWithFormat:@"%@",car_num];
+            NSString *cart_numStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
+            NSInteger cartTotal = [cart_numStr integerValue];
+            _carView.numberLable.text = [NSString stringWithFormat:@"%ld",(long)cartTotal];
+            //保存车队数量
+            [[NSUserDefaults standardUserDefaults]setObject:cart_numStr forKey:HCJDCart_num];
+            
         }else if (status == 0){
             NSString *info = [NSString stringWithFormat:@"%@",dic[@"info"]];
             //加入失败

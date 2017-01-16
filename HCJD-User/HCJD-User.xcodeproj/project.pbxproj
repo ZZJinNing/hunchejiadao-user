@@ -42,6 +42,7 @@
 		821C465E1E25E4B000761DAF /* monkey.gif in Resources */ = {isa = PBXBuildFile; fileRef = 821C465D1E25E4B000761DAF /* monkey.gif */; };
 		821C46621E26007D00761DAF /* ProductModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 821C46611E26007D00761DAF /* ProductModel.m */; };
 		821C46651E2627BF00761DAF /* ProductGroupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 821C46641E2627BF00761DAF /* ProductGroupModel.m */; };
+		821D3C641E2A0D9B00B0B8C2 /* FavoriteModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 821D3C631E2A0D9B00B0B8C2 /* FavoriteModel.m */; };
 		822DBDBB1E1E43FF00EE9923 /* OrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 822DBDB91E1E43FF00EE9923 /* OrderCell.m */; };
 		822DBDBC1E1E43FF00EE9923 /* OrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822DBDBA1E1E43FF00EE9923 /* OrderCell.xib */; };
 		82359F9B1E1DE006000D11C7 /* MyOrderVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 82359F9A1E1DE006000D11C7 /* MyOrderVC.m */; };
@@ -56,20 +57,16 @@
 		824B495B1E1B76D6006D8C1F /* ZiXuanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 824B495A1E1B76D6006D8C1F /* ZiXuanDetailViewController.m */; };
 		824B495E1E1B793B006D8C1F /* TaoCanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 824B495D1E1B793B006D8C1F /* TaoCanDetailViewController.m */; };
 		824B49661E1B9889006D8C1F /* MyMessageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 824B49651E1B9889006D8C1F /* MyMessageVC.m */; };
+		8284DFBA1E28CC8900F367E3 /* homeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8284DFB91E28CC8900F367E3 /* homeTableViewCell.m */; };
 		82FE2DFA1E27178400A319B9 /* RegisterVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FE2DF91E27178400A319B9 /* RegisterVC.m */; };
 		82FE2E001E2717D600A319B9 /* GestureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FE2DFF1E2717D600A319B9 /* GestureView.m */; };
 		82FE2E031E2756DD00A319B9 /* DetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FE2E021E2756DD00A319B9 /* DetailModel.m */; };
 		82FE2E061E2756EC00A319B9 /* DetailGroupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FE2E051E2756EC00A319B9 /* DetailGroupModel.m */; };
 		EE464FD01E28B56A00137DCB /* cityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FBC1E28B56A00137DCB /* cityModel.m */; };
 		EE464FD11E28B56A00137DCB /* CityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FBE1E28B56A00137DCB /* CityViewController.m */; };
-		EE464FD21E28B56A00137DCB /* homeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FC11E28B56A00137DCB /* homeModel.m */; };
-		EE464FD31E28B56A00137DCB /* homeModelGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FC31E28B56A00137DCB /* homeModelGroup.m */; };
-		EE464FD41E28B56A00137DCB /* homeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FC51E28B56A00137DCB /* homeTableViewCell.m */; };
 		EE464FD51E28B56A00137DCB /* homeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE464FC61E28B56A00137DCB /* homeTableViewCell.xib */; };
-		EE464FD61E28B56A00137DCB /* homeTaocanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FC81E28B56A00137DCB /* homeTaocanModel.m */; };
 		EE464FD71E28B56A00137DCB /* homeTaoCanTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FCA1E28B56A00137DCB /* homeTaoCanTableViewCell.m */; };
 		EE464FD81E28B56A00137DCB /* homeTaoCanTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE464FCB1E28B56A00137DCB /* homeTaoCanTableViewCell.xib */; };
-		EE464FD91E28B56A00137DCB /* HomeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FCD1E28B56A00137DCB /* HomeDetailViewController.m */; };
 		EE464FDA1E28B56A00137DCB /* HomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FCF1E28B56A00137DCB /* HomeVC.m */; };
 		EE77A2FC1E20AF8E00A073BA /* user.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE77A2FB1E20AF8E00A073BA /* user.plist */; };
 		EEECC37A1E20857B00362970 /* MNDownLoad.m in Sources */ = {isa = PBXBuildFile; fileRef = EEECC3791E20857B00362970 /* MNDownLoad.m */; };
@@ -148,6 +145,8 @@
 		821C46611E26007D00761DAF /* ProductModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductModel.m; sourceTree = "<group>"; };
 		821C46631E2627BF00761DAF /* ProductGroupModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductGroupModel.h; sourceTree = "<group>"; };
 		821C46641E2627BF00761DAF /* ProductGroupModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductGroupModel.m; sourceTree = "<group>"; };
+		821D3C621E2A0D9B00B0B8C2 /* FavoriteModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteModel.h; sourceTree = "<group>"; };
+		821D3C631E2A0D9B00B0B8C2 /* FavoriteModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteModel.m; sourceTree = "<group>"; };
 		822DBDB81E1E43FF00EE9923 /* OrderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderCell.h; sourceTree = "<group>"; };
 		822DBDB91E1E43FF00EE9923 /* OrderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderCell.m; sourceTree = "<group>"; };
 		822DBDBA1E1E43FF00EE9923 /* OrderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderCell.xib; sourceTree = "<group>"; };
@@ -174,6 +173,8 @@
 		824B495D1E1B793B006D8C1F /* TaoCanDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaoCanDetailViewController.m; sourceTree = "<group>"; };
 		824B49641E1B9889006D8C1F /* MyMessageVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMessageVC.h; sourceTree = "<group>"; };
 		824B49651E1B9889006D8C1F /* MyMessageVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMessageVC.m; sourceTree = "<group>"; };
+		8284DFB81E28CC8900F367E3 /* homeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeTableViewCell.h; sourceTree = "<group>"; };
+		8284DFB91E28CC8900F367E3 /* homeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = homeTableViewCell.m; sourceTree = "<group>"; };
 		82FE2DF81E27178400A319B9 /* RegisterVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterVC.h; sourceTree = "<group>"; };
 		82FE2DF91E27178400A319B9 /* RegisterVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterVC.m; sourceTree = "<group>"; };
 		82FE2DFE1E2717D600A319B9 /* GestureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureView.h; sourceTree = "<group>"; };
@@ -187,20 +188,10 @@
 		EE464FBC1E28B56A00137DCB /* cityModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cityModel.m; sourceTree = "<group>"; };
 		EE464FBD1E28B56A00137DCB /* CityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CityViewController.h; sourceTree = "<group>"; };
 		EE464FBE1E28B56A00137DCB /* CityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CityViewController.m; sourceTree = "<group>"; };
-		EE464FC01E28B56A00137DCB /* homeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeModel.h; sourceTree = "<group>"; };
-		EE464FC11E28B56A00137DCB /* homeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = homeModel.m; sourceTree = "<group>"; };
-		EE464FC21E28B56A00137DCB /* homeModelGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeModelGroup.h; sourceTree = "<group>"; };
-		EE464FC31E28B56A00137DCB /* homeModelGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = homeModelGroup.m; sourceTree = "<group>"; };
-		EE464FC41E28B56A00137DCB /* homeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeTableViewCell.h; sourceTree = "<group>"; };
-		EE464FC51E28B56A00137DCB /* homeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = homeTableViewCell.m; sourceTree = "<group>"; };
 		EE464FC61E28B56A00137DCB /* homeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = homeTableViewCell.xib; sourceTree = "<group>"; };
-		EE464FC71E28B56A00137DCB /* homeTaocanModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeTaocanModel.h; sourceTree = "<group>"; };
-		EE464FC81E28B56A00137DCB /* homeTaocanModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = homeTaocanModel.m; sourceTree = "<group>"; };
 		EE464FC91E28B56A00137DCB /* homeTaoCanTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeTaoCanTableViewCell.h; sourceTree = "<group>"; };
 		EE464FCA1E28B56A00137DCB /* homeTaoCanTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = homeTaoCanTableViewCell.m; sourceTree = "<group>"; };
 		EE464FCB1E28B56A00137DCB /* homeTaoCanTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = homeTaoCanTableViewCell.xib; sourceTree = "<group>"; };
-		EE464FCC1E28B56A00137DCB /* HomeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeDetailViewController.h; sourceTree = "<group>"; };
-		EE464FCD1E28B56A00137DCB /* HomeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeDetailViewController.m; sourceTree = "<group>"; };
 		EE464FCE1E28B56A00137DCB /* HomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeVC.h; sourceTree = "<group>"; };
 		EE464FCF1E28B56A00137DCB /* HomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeVC.m; sourceTree = "<group>"; };
 		EE77A2FB1E20AF8E00A073BA /* user.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = user.plist; sourceTree = "<group>"; };
@@ -255,9 +246,9 @@
 		820859171E1F82AD00989AD9 /* MyTeam */ = {
 			isa = PBXGroup;
 			children = (
-				820859181E1F82AD00989AD9 /* MyTeamModel&Cell */,
 				8208591D1E1F82AD00989AD9 /* MyTeamViewController.h */,
 				8208591E1E1F82AD00989AD9 /* MyTeamViewController.m */,
+				820859181E1F82AD00989AD9 /* MyTeamModel&Cell */,
 				8208591F1E1F82AD00989AD9 /* settlementMoney */,
 			);
 			path = MyTeam;
@@ -341,11 +332,11 @@
 		820EA1781E12197000AE55BE /* HCJD-User */ = {
 			isa = PBXGroup;
 			children = (
-				EE464FB91E28B56A00137DCB /* Home */,
-				820858FC1E1F822600989AD9 /* BaseView */,
 				820EA1971E121AD900AE55BE /* Tool */,
-				820EA1B61E1246BB00AE55BE /* LoginAndRegister */,
 				EEECC3771E20854400362970 /* Net */,
+				820858FC1E1F822600989AD9 /* BaseView */,
+				820EA1B61E1246BB00AE55BE /* LoginAndRegister */,
+				EE464FB91E28B56A00137DCB /* Home */,
 				820EA19A1E121B8B00AE55BE /* FindCar */,
 				820EA19C1E121B8B00AE55BE /* Mine */,
 				820EA1901E1219E800AE55BE /* Tarbar */,
@@ -400,8 +391,8 @@
 				820EA1A11E121BC700AE55BE /* FindCarVC.m */,
 				82359F9F1E1E2916000D11C7 /* KeFuVC.h */,
 				82359FA01E1E2916000D11C7 /* KeFuVC.m */,
-				821C465F1E26006100761DAF /* Model */,
 				824B49581E1B76C9006D8C1F /* DetailVC */,
+				821C465F1E26006100761DAF /* Model */,
 				820EA1BA1E12613400AE55BE /* Cell */,
 			);
 			path = FindCar;
@@ -473,6 +464,15 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		821D3C611E2A0D8400B0B8C2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				821D3C621E2A0D9B00B0B8C2 /* FavoriteModel.h */,
+				821D3C631E2A0D9B00B0B8C2 /* FavoriteModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		822DBDB71E1E43E100EE9923 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -528,6 +528,7 @@
 			children = (
 				8244849B1E1CC621000A1E3B /* MyFavoriteVC.h */,
 				8244849C1E1CC621000A1E3B /* MyFavoriteVC.m */,
+				821D3C611E2A0D8400B0B8C2 /* Model */,
 				8244849E1E1CC68F000A1E3B /* View */,
 			);
 			path = MyFavorite;
@@ -579,12 +580,10 @@
 		EE464FB91E28B56A00137DCB /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				EE464FBA1E28B56A00137DCB /* CityVC */,
-				EE464FBF1E28B56A00137DCB /* HomeCell&model */,
-				EE464FCC1E28B56A00137DCB /* HomeDetailViewController.h */,
-				EE464FCD1E28B56A00137DCB /* HomeDetailViewController.m */,
 				EE464FCE1E28B56A00137DCB /* HomeVC.h */,
 				EE464FCF1E28B56A00137DCB /* HomeVC.m */,
+				EE464FBA1E28B56A00137DCB /* CityVC */,
+				EE464FBF1E28B56A00137DCB /* HomeCell&model */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -603,15 +602,9 @@
 		EE464FBF1E28B56A00137DCB /* HomeCell&model */ = {
 			isa = PBXGroup;
 			children = (
-				EE464FC01E28B56A00137DCB /* homeModel.h */,
-				EE464FC11E28B56A00137DCB /* homeModel.m */,
-				EE464FC21E28B56A00137DCB /* homeModelGroup.h */,
-				EE464FC31E28B56A00137DCB /* homeModelGroup.m */,
-				EE464FC41E28B56A00137DCB /* homeTableViewCell.h */,
-				EE464FC51E28B56A00137DCB /* homeTableViewCell.m */,
+				8284DFB81E28CC8900F367E3 /* homeTableViewCell.h */,
+				8284DFB91E28CC8900F367E3 /* homeTableViewCell.m */,
 				EE464FC61E28B56A00137DCB /* homeTableViewCell.xib */,
-				EE464FC71E28B56A00137DCB /* homeTaocanModel.h */,
-				EE464FC81E28B56A00137DCB /* homeTaocanModel.m */,
 				EE464FC91E28B56A00137DCB /* homeTaoCanTableViewCell.h */,
 				EE464FCA1E28B56A00137DCB /* homeTaoCanTableViewCell.m */,
 				EE464FCB1E28B56A00137DCB /* homeTaoCanTableViewCell.xib */,
@@ -785,7 +778,6 @@
 				822DBDBB1E1E43FF00EE9923 /* OrderCell.m in Sources */,
 				824B495B1E1B76D6006D8C1F /* ZiXuanDetailViewController.m in Sources */,
 				820EA1961E1219EE00AE55BE /* TarbarViewController.m in Sources */,
-				EE464FD61E28B56A00137DCB /* homeTaocanModel.m in Sources */,
 				8208593E1E1F832600989AD9 /* AppDelegate.m in Sources */,
 				820859391E1F82AD00989AD9 /* settlementModel.m in Sources */,
 				82FE2E061E2756EC00A319B9 /* DetailGroupModel.m in Sources */,
@@ -809,20 +801,19 @@
 				8201876B1E1611B6007DBC46 /* HCYXSelfCell.m in Sources */,
 				820859381E1F82AD00989AD9 /* SearchMapViewController.m in Sources */,
 				EEECC38C1E20869800362970 /* MBProgressHUD+Add.m in Sources */,
+				821D3C641E2A0D9B00B0B8C2 /* FavoriteModel.m in Sources */,
 				82359FA11E1E2916000D11C7 /* KeFuVC.m in Sources */,
-				EE464FD91E28B56A00137DCB /* HomeDetailViewController.m in Sources */,
 				820EA1BE1E1261E900AE55BE /* HCYXCell.m in Sources */,
 				820EA1A21E121BC700AE55BE /* FindCarVC.m in Sources */,
 				820EA1A51E121BD300AE55BE /* MineVC.m in Sources */,
 				EE464FD71E28B56A00137DCB /* homeTaoCanTableViewCell.m in Sources */,
 				820859371E1F82AD00989AD9 /* mapViewController.m in Sources */,
 				824484931E1C9588000A1E3B /* ChangeNickNameVC.m in Sources */,
-				EE464FD31E28B56A00137DCB /* homeModelGroup.m in Sources */,
 				820EA1951E1219EE00AE55BE /* CustomNavigationController.m in Sources */,
 				EE464FD01E28B56A00137DCB /* cityModel.m in Sources */,
 				8208593A1E1F82AD00989AD9 /* settlementTableViewCell.m in Sources */,
 				8216ED031E235FCE00C5CB1C /* ForgetPassVC.m in Sources */,
-				EE464FD21E28B56A00137DCB /* homeModel.m in Sources */,
+				8284DFBA1E28CC8900F367E3 /* homeTableViewCell.m in Sources */,
 				821C46561E25D31300761DAF /* GiFHUD.m in Sources */,
 				821C46621E26007D00761DAF /* ProductModel.m in Sources */,
 				EEECC3831E2085F400362970 /* AESEncryption.m in Sources */,
@@ -838,7 +829,6 @@
 				8216ED091E238AB600C5CB1C /* CustomView.m in Sources */,
 				824484961E1C9EDB000A1E3B /* ChangePasswordVC.m in Sources */,
 				820859351E1F82AD00989AD9 /* AMapTipAnnotation.m in Sources */,
-				EE464FD41E28B56A00137DCB /* homeTableViewCell.m in Sources */,
 				824484A21E1CC6C4000A1E3B /* FavoriteCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

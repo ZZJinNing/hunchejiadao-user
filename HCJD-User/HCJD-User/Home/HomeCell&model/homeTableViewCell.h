@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ProductModel.h"
 
 @interface homeTableViewCell : UITableViewCell
+//ID
+@property (nonatomic,retain) NSString *ID;
 
 //汽车照片
 @property (weak, nonatomic) IBOutlet UIImageView *carImageView;
@@ -20,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *moneyLabel;
 
 
-
+- (void)setupValueWithModel:(ProductModel *)model;
 
 
 @end

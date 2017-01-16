@@ -18,5 +18,6 @@ typedef void (^Failure)(NSError * error);
 
 - (void)POST:(NSString*)url param:(NSDictionary*)para success:(Success)success failure:(Failure)failure withSuperView:(UIViewController *)superController;
 
+- (void)POSTWithoutGitHUD:(NSString*)url param:(NSDictionary*)para success:(Success)success failure:(Failure)failure withSuperView:(UIViewController *)superController;
 //- (void)POST:(NSString*)imageUrl 
 @end

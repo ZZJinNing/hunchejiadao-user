@@ -54,8 +54,7 @@
 }
 
 
-
-//当前城市
+#pragma mark--当前城市
 - (void)currentCity{
     UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 10, kScreenWidth, 50)];
     bgView.backgroundColor = [UIColor whiteColor];
@@ -68,7 +67,7 @@
     
 }
 
-#pragma mark - 获取已开通的所有城市
+#pragma mark--获取已开通的所有城市
 - (void)getOpenCityDataSource{
     NSString *url = @"cityOpenAll";
     
@@ -98,8 +97,7 @@
     } withSuperView:self];
 }
 
-
-//已开通城市
+#pragma mark--已开通城市
 - (void)openCity{
     NSInteger allNum;
     NSInteger num = _cityArray.count/3;
@@ -122,12 +120,10 @@
     lineLabel.backgroundColor = LineColor;
     [bgView addSubview:lineLabel];
     
-    
-    
     [self crateCityButtonWithView:bgView];
     
 }
-
+#pragma mark--初始化视图
 - (void)crateCityButtonWithView:(UIView*)view{
     NSInteger flag = 0;
     
@@ -172,13 +168,12 @@
     [view addSubview:button];
 }
 
-
+#pragma mark - 手动切换城市
 - (void)selectCity:(UIButton*)button{
     NSInteger flag = button.tag - 100;
     //手动切换城市
     [self SwitchTheCityWithFlag:flag];
 }
-#pragma mark - 手动切换城市
 - (void)SwitchTheCityWithFlag:(NSInteger)flag{
     cityModel *model = _cityArray[flag];
     NSDictionary *param = @{@"city_id":model.city_id};
@@ -190,8 +185,6 @@
         }else{
             [MBProgressHUD showSuccess:info toView:self.view];
         }
-        
-        
     } failure:^(NSError *error) {
         
     } withSuperView:self];

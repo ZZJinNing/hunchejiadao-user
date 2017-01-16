@@ -89,30 +89,29 @@
 #pragma mark--数据源
 - (void)getDataWithCtl:(NSString *)ctl withTableView:(UITableView *)tableview{
     
-    //产品数据模块
+    //数据模块
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:[NSString stringWithFormat:@"%ld",(long)page]  forKey:@"page"];
     
     [_downLoad POST:ctl param:param success:^(NSDictionary *dic) {
         
-        
 //        NSLog(@"%@---%@---%@",dic,dic[@"info"],param);
         
         NSArray *returnArr = dic[@"return"];
-        
-        for (NSDictionary *productDic in returnArr) {
-            //判断ctl
-            if ([ctl isEqualToString:@"productList"]) {
-                ProductModel *model = [[ProductModel alloc]init];
-                [model setupValueWith:productDic];
-                [_modelArr addObject:model];
-            }else if ([ctl isEqualToString:@"productGroupList"]){
-                ProductGroupModel *model = [[ProductGroupModel alloc]init];
-                [model setupValueWith:productDic];
-                [_modelArr addObject:model];
+        if (!kArrayIsEmpty(returnArr)) {
+            for (NSDictionary *productDic in returnArr) {
+                //判断ctl
+                if ([ctl isEqualToString:@"productList"]) {
+                    ProductModel *model = [[ProductModel alloc]init];
+                    [model setupValueWith:productDic];
+                    [_modelArr addObject:model];
+                }else if ([ctl isEqualToString:@"productGroupList"]){
+                    ProductGroupModel *model = [[ProductGroupModel alloc]init];
+                    [model setupValueWith:productDic];
+                    [_modelArr addObject:model];
+                }
             }
-            
         }
         
         [tableview reloadData];
@@ -122,10 +121,10 @@
     } withSuperView:self];
 }
 
-#pragma mark - 收藏车的数量
+#pragma mark--车队数量
 - (void)carCollection{
-    
-   carView = [[CarCollectionView alloc]initWithFrame:CGRectMake(kScreenWidth-80, kScreenHeight-150-64, 60, 60) withNumber:1];
+    NSString *cart_num = [[NSUserDefaults standardUserDefaults]objectForKey:HCJDCart_num];
+    carView = [[CarCollectionView alloc]initWithFrame:CGRectMake(kScreenWidth-80, kScreenHeight-150-64, 60, 60) withNumber:[cart_num integerValue]];
     carView.layer.cornerRadius = 30;
     carView.layer.masksToBounds = YES;
     [self.view addSubview:carView];
@@ -136,6 +135,7 @@
     [carView addGestureRecognizer:tgr];
     
 }
+#pragma mark--点击收藏
 - (void)handle{
     MyTeamViewController *vc = [[MyTeamViewController alloc]init];
     [self.navigationController pushViewController:vc animated:YES];
@@ -163,7 +163,7 @@
     
     [segmentView addSubview:sgc];
 }
-//sgc点击事件
+#pragma mark--sgc点击事件
 - (void)changeIndex:(UISegmentedControl *)sgc{
     
     [_modelArr removeAllObjects];//清空数据

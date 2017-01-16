@@ -51,7 +51,7 @@
 
 
 //判断字典是否为空
-#define kDictIsEmpty(dic) (dic == nil || [dic isKindOfClass:[NSNull class]] || dic.allK
+#define kDictIsEmpty(dic) (dic == nil || [dic isKindOfClass:[NSNull class]] || dic.allKeys.count == 0)
 
 
 
@@ -103,7 +103,7 @@
 
 
 
-//=================账号密码==================
+//=================常量保存==================
 //密码
 #define HCJDPassword @"HCJDPassword"
 //账号
@@ -113,6 +113,9 @@
 #define HCJDName @"HCJDName"
 //头像图片url
 #define HCJDPhoto @"HCJDPhoto"
+
+//车队数量
+#define HCJDCart_num @"HCJDCart_num"
 
 
 

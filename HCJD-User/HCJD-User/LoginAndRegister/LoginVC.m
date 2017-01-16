@@ -23,6 +23,7 @@
     
     CustomView *_accountView;//账号视图
     CustomView *_passView;//密码视图
+    NSInteger cart_num;//车队数量
 }
 
 @end
@@ -33,15 +34,14 @@
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    
     _download = [MNDownLoad shareManager];
     
     [self createUI];
+    
 }
 
 - (void)createUI{
@@ -59,8 +59,6 @@
     .centerXEqualToView(_tpScrollView)
     .heightIs(130*kScaleHeight)
     .widthIs(112*kScaleWidth);
-    
-    
     
     h = 40*kScaleHeight;//view的高度
     w = 20*kScaleWidth;//view距离左右两侧的宽度
@@ -125,11 +123,9 @@
     .rightEqualToView(loginBtn)
     .widthIs(kScreenWidth/3)
     .heightIs(h);
-    
-    
 }
 
-//登录按钮点击事件
+#pragma mark--登录按钮点击事件
 - (void)loginBtnClick{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:_accountView.customTF.text forKey:@"phone"];
@@ -155,12 +151,8 @@
             [[NSUserDefaults standardUserDefaults] setObject:name forKey:HCJDName];
             [[NSUserDefaults standardUserDefaults] setObject:photoUtl forKey:HCJDPhoto];
             
-//            [self.navigationController pushViewController:[[TarbarViewController alloc]init] animated:YES];
-            
-            [self presentViewController:[[TarbarViewController alloc]init] animated:YES completion:nil];
-            
-//            [self.navigationController popToRootViewControllerAnimated:YES];
-            
+            //请求获取车队数量
+            [self getCartNum];
             
             
         }else{
@@ -170,13 +162,29 @@
     } failure:^(NSError *error) {
         
     } withSuperView:self];
+}
+#pragma mark--请求获取车队数量
+- (void)getCartNum{
+    [[MNDownLoad shareManager] POSTWithoutGitHUD:@"cartNum" param:nil success:^(NSDictionary *dic) {
+        NSLog(@"%@",dic);
+        NSInteger status = [dic[@"status"] integerValue];
+        if (status == 1) {
+            cart_num = [dic[@"return"][@"cart_num"] integerValue];
+            //保存cart_num
+            [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%ld",(long)cart_num] forKey:HCJDCart_num];
+            
+            [self presentViewController:[[TarbarViewController alloc]init] animated:YES completion:nil];
+        }
+    } failure:^(NSError *error) {
+        
+    } withSuperView:self];
     
 }
-//忘记密码点击事件
+#pragma mark--忘记密码点击事件
 - (void)forgetBtnClick{
     
 }
-//注册按钮点击事件
+#pragma mark--注册按钮点击事件
 - (void)registerBtnClick{
     RegisterVC *vc = [[RegisterVC alloc]init];
     vc.view.backgroundColor = kRGB(248, 248, 248);
@@ -187,15 +195,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

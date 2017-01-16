@@ -26,11 +26,48 @@
     self.leftImageView.layer.cornerRadius = 3;
     self.leftImageView.layer.masksToBounds = YES;
     
-    self.taocan = NO;
-    
-    
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
+}
+
+- (void)setupProductValueWith:(ProductModel *)productModel{
+    //ID
+    self.ID = productModel._id;
+    //定金
+    self.advanceLabel.text = [NSString stringWithFormat:@"￥%@",productModel.price_front];
+    //车名
+    self.nameLabel.text = [NSString stringWithFormat:@"%@",productModel.name];
+    //总价
+    self.totalLabel.text = [NSString stringWithFormat:@"￥%@",productModel.price_total];
+    //图片
+    [self.leftImageView sd_setImageWithURL:[NSURL URLWithString:productModel.image] placeholderImage:[UIImage imageNamed:@"image"]];
+    
+    self.leftLabel.hidden = YES;
+    self.taocanImageView.hidden = YES;
+    self.headCarLabel.hidden = YES;
+}
+
+- (void)setupGroupValueWith:(ProductGroupModel *)groupModel{
+    //ID
+    self.ID = groupModel._id;
+    //定金
+    self.advanceLabel.text = [NSString stringWithFormat:@"￥%@",groupModel.price_front];
+    //车名
+    self.nameLabel.text = [NSString stringWithFormat:@"%@",groupModel.name];
+    //总价
+    self.totalLabel.text = [NSString stringWithFormat:@"￥%@",groupModel.price_total];
+    //图片
+    [self.leftImageView sd_setImageWithURL:[NSURL URLWithString:groupModel.image] placeholderImage:[UIImage imageNamed:@"image"]];
+    //头车
+    self.headCarLabel.text = [NSString stringWithFormat:@"%@",groupModel.header_car];
+    
+}
+
+//判断是否是套餐，是否隐藏头车和套餐标签
+- (void)weatherHidden{
+    self.leftLabel.hidden = NO;
+    self.taocanImageView.hidden = NO;
+    self.headCarLabel.hidden = NO;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

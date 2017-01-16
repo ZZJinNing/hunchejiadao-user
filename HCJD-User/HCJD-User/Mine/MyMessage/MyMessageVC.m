@@ -293,7 +293,6 @@
 #pragma mark--退出登录
 - (void)logoutApp{
     
-    
     [_downLoad POST:@"logout" param:nil success:^(NSDictionary *dic) {
 //        NSLog(@"%@--%@",dic,dic[@"info"]);
         
@@ -306,7 +305,7 @@
             
             [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:HCJDName];
             [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:HCJDPhoto];
-            
+            [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:HCJDCart_num];
             
             LoginVC *vc = [[LoginVC alloc]init];
             vc.view.backgroundColor = grayBG;

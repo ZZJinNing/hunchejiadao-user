@@ -22,6 +22,10 @@
     self.f_product_num = productDic[@"follow_car"][@"product_num"];
     self.f_base_hour = productDic[@"follow_car"][@"base_hour"];
     self.f_base_mileage = productDic[@"follow_car"][@"base_mileage"];
+    
+    
+    self.header_car = productDic[@"header_car"][@"name"];
+    
 }
 
 @end

@@ -46,17 +46,28 @@
     //是否收藏
     BOOL collection;
     
+    //车队数量
     CarCollectionView *_carView;
+    
+    //车队数量
+    NSInteger cart_num;
     
 }
 @end
 
 @implementation TaoCanDetailViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.title = @"套餐详情";
+    
+    _downLoad = [MNDownLoad shareManager];
     
     collection = NO;
     
@@ -84,7 +95,7 @@
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:self.productGroupModel._id forKey:@"_id"];
     [_downLoad POST:@"productGroupDetail" param:param success:^(NSDictionary *dic) {
-        NSLog(@"%@",dic);
+//        NSLog(@"%@",dic);
         NSDictionary *returnDic = dic[@"return"];
         
         [_detailGroupModel setupValueWith:returnDic];
@@ -94,8 +105,6 @@
         }else{
             _collectionImageView.image = [UIImage imageNamed:@"iconGray"];
         }
-        
-        
     } failure:^(NSError *error) {
         
     } withSuperView:self];
@@ -200,9 +209,11 @@
 - (void)collectSwitch{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:_productGroupModel._id forKey:@"product_id"];
-    [param setObject:@"product" forKey:@"type"];
+    [param setObject:@"group" forKey:@"type"];
     [_downLoad POST:@"collectSwitch" param:param success:^(NSDictionary *dic) {
+        
         NSLog(@"%@",dic);
+        
     } failure:^(NSError *error) {
         
     } withSuperView:self];
@@ -250,8 +261,9 @@
     [self.view addSubview:_bottomView];
     
     
-    
-    _carView = [[CarCollectionView alloc]initWithFrame:CGRectMake(0, 0, 80, 60) withNumber:1];
+    NSString *cart_numStr = [[NSUserDefaults standardUserDefaults]objectForKey:HCJDCart_num];
+    cart_num = [cart_numStr integerValue];
+    _carView = [[CarCollectionView alloc]initWithFrame:CGRectMake(0, 0, 80, 60) withNumber:cart_num];
     [_bottomView addSubview:_carView];
     //添加点击事件
     UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handle)];
@@ -310,8 +322,8 @@
     [param setObject:@"0" forKey:@"is_sure"];
     
     [_downLoad POST:@"cartAddGroup" param:param success:^(NSDictionary *dic) {
-        NSLog(@"%@",dic);
         
+        NSLog(@"%@",dic);
         
         NSInteger status = [dic[@"status"] integerValue];
         if (status == -2) {
@@ -321,6 +333,13 @@
             UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"       取消" style:UIAlertActionStyleCancel handler:nil];
             UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [_downLoad POST:@"cartAddGroup" param:param success:^(NSDictionary *dic) {
+                    //修改车队数量
+                    NSString *cart_numStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
+                    NSInteger cartTotal = [cart_numStr integerValue];
+                    _carView.numberLable.text = [NSString stringWithFormat:@"%ld",(long)cartTotal];
+                    //保存车队数量
+                    [[NSUserDefaults standardUserDefaults]setObject:cart_numStr forKey:HCJDCart_num];
+                    
                     //修改成功提示
                     UIAlertView *OK = [[UIAlertView alloc]initWithTitle:@"修改成功" message:@"" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
                     [OK show];
@@ -335,8 +354,11 @@
             [self presentViewController:alert animated:YES completion:nil];
         }else if (status == 1){
             //修改车队数量
-            NSString *car_num = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
-            _carView.numberLable.text = [NSString stringWithFormat:@"%@",car_num];
+            NSString *cart_numStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
+            NSInteger cartTotal = [cart_numStr integerValue];
+            _carView.numberLable.text = [NSString stringWithFormat:@"%ld",(long)cartTotal];
+            //保存车队数量
+            [[NSUserDefaults standardUserDefaults]setObject:cart_numStr forKey:HCJDCart_num];
         }else if (status == 0){
             NSString *info = [NSString stringWithFormat:@"%@",dic[@"info"]];
             //加入失败

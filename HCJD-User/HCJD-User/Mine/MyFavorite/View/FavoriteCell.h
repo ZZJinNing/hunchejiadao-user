@@ -7,13 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ProductModel.h"
+#import "ProductGroupModel.h"
+
 
 @interface FavoriteCell : UITableViewCell
-
 /*
- *是否是套餐
+ *ID
  */
-@property (assign,nonatomic) BOOL taocan;
+@property (nonatomic,retain)NSString *ID;
 
 /*
  *左侧图片
@@ -52,4 +54,11 @@
  */
 @property (weak, nonatomic) IBOutlet UILabel *bottomLabel;
 
+
+
+- (void)setupProductValueWith:(ProductModel *)productModel;
+
+- (void)setupGroupValueWith:(ProductGroupModel *)groupModel;
+
+- (void)weatherHidden;
 @end

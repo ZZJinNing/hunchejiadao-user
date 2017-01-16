@@ -79,7 +79,7 @@
     [myCarsView addGestureRecognizer:carsTarget];
     
     //我的收藏
-    UIView *myFavoriteView = [self createClickViewWith:carOwnerView withImageName:@"icon_home_zixc" withTitle:@"我的收藏" withTopFloat:0 withLeftToView:self.view];
+    UIView *myFavoriteView = [self createClickViewWith:carOwnerView withImageName:@"icon_my_zixc" withTitle:@"我的收藏" withTopFloat:0 withLeftToView:self.view];
     UITapGestureRecognizer *favoriteTarget = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(myFavoriteViewClick)];
     [myFavoriteView addGestureRecognizer:favoriteTarget];
     
