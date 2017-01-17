@@ -225,7 +225,7 @@
     [param setObject:@"product" forKey:@"type"];
     [_downLoad POST:@"collectSwitch" param:param success:^(NSDictionary *dic) {
         
-        NSLog(@"%@",dic);
+//        NSLog(@"%@",dic);
         
     } failure:^(NSError *error) {
         
@@ -440,7 +440,7 @@
     [param setObject:@"0" forKey:@"is_sure"];
     
     [_downLoad POST:@"cartAddProduct" param:param success:^(NSDictionary *dic) {
-        NSLog(@"%@",dic);
+//        NSLog(@"%@",dic);
         
         NSInteger status = [dic[@"status"] integerValue];
         if (status == -2) {

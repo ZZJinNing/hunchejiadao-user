@@ -30,7 +30,7 @@
     
     //数量
     _numberLable = [[UILabel alloc]init];
-    _numberLable.frame = CGRectMake((imageView.bounds.size.width-7), 5, 15, -10);
+    _numberLable.frame = CGRectMake((imageView.bounds.size.width-7), 5, 17, -10);
     _numberLable.textAlignment = NSTextAlignmentCenter;
     _numberLable.font = [UIFont systemFontOfSize:12];
     _numberLable.adjustsFontSizeToFitWidth = YES;

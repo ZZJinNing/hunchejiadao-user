@@ -123,7 +123,7 @@
     AppDelegate *appdelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     UIWindow *MNWindow = appdelegate.window;
     
-    //    [MBProgressHUD showMessag:@"正在加载中" toView:MNWindow];
+    [MBProgressHUD showMessag:@"正在加载中" toView:MNWindow];
     NSMutableDictionary *Myparam = [[NSMutableDictionary alloc]initWithDictionary:para];
     NSString *account = [[NSUserDefaults standardUserDefaults]objectForKey:HCJDPhone];
     NSString *password = [[NSUserDefaults standardUserDefaults]objectForKey:HCJDPassword];
@@ -139,7 +139,7 @@
         
         if (success) {
             
-            //            [MBProgressHUD hideAllHUDsForView:MNWindow animated:YES];
+            [MBProgressHUD hideAllHUDsForView:MNWindow animated:YES];
             
             NSDictionary *dic = [self decrypeJsonWithData:responseObject];
             
@@ -154,7 +154,7 @@
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
-        //        [MBProgressHUD hideAllHUDsForView:MNWindow animated:YES];
+        [MBProgressHUD hideAllHUDsForView:MNWindow animated:YES];
         [MBProgressHUD showSuccess:@"网络加载失败" toView:MNWindow];
         if (failure) {
             failure(error);
@@ -163,6 +163,51 @@
     }];
     
 }
+
+
+/**
+ *  数据请求，页面没有加载框
+ */
+- (void)POSTWithOutHUD:(NSString*)url param:(NSDictionary*)para success:(Success)success failure:(Failure)failure withSuperView:(UIViewController *)superController{
+    
+    NSString *urlPath = [[NSBundle mainBundle] pathForResource:@"user" ofType:@"plist"];
+    userDic = [NSDictionary dictionaryWithContentsOfFile:urlPath];
+    NSString *Myurl = userDic[@"baseURL"];
+    NSString *baseURL = [NSString stringWithFormat:@"%@%@",Myurl,url];
+    NSMutableDictionary *Myparam = [[NSMutableDictionary alloc]initWithDictionary:para];
+    NSString *account = [[NSUserDefaults standardUserDefaults]objectForKey:HCJDPhone];
+    NSString *password = [[NSUserDefaults standardUserDefaults]objectForKey:HCJDPassword];
+    [Myparam setObject:@"true" forKey:@"ajax"];
+    [Myparam setObject:@"iOS" forKey:@"_device"];
+    
+    if (password && account) {
+        [Myparam setObject:password forKey:@"_password"];
+        [Myparam setObject:account forKey:@"_account"];
+    }
+    
+    [_manager POST:baseURL parameters:Myparam progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        if (success) {
+            NSDictionary *dic = [self decrypeJsonWithData:responseObject];
+            
+            NSString *code = dic[@"code"];
+            if ([code isEqualToString:@"login"]) {
+                JJHPOPAlertView *allert = [[JJHPOPAlertView alloc]initWithSuperView:superController withCode:code];
+                [allert popView];
+            }else{
+                success(dic);
+            }
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (failure) {
+            failure(error);
+        }
+        
+    }];
+    
+}
+
 
 
 

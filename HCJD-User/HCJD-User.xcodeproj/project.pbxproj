@@ -69,6 +69,7 @@
 		EE464FD81E28B56A00137DCB /* homeTaoCanTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE464FCB1E28B56A00137DCB /* homeTaoCanTableViewCell.xib */; };
 		EE464FDA1E28B56A00137DCB /* HomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FCF1E28B56A00137DCB /* HomeVC.m */; };
 		EE77A2FC1E20AF8E00A073BA /* user.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE77A2FB1E20AF8E00A073BA /* user.plist */; };
+		EE8C4CCF1E2DC325005D5D68 /* EmptyView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8C4CCE1E2DC325005D5D68 /* EmptyView.m */; };
 		EEECC37A1E20857B00362970 /* MNDownLoad.m in Sources */ = {isa = PBXBuildFile; fileRef = EEECC3791E20857B00362970 /* MNDownLoad.m */; };
 		EEECC3831E2085F400362970 /* AESEncryption.m in Sources */ = {isa = PBXBuildFile; fileRef = EEECC37C1E2085F400362970 /* AESEncryption.m */; };
 		EEECC3841E2085F400362970 /* base64Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = EEECC37E1E2085F400362970 /* base64Encode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -195,6 +196,8 @@
 		EE464FCE1E28B56A00137DCB /* HomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeVC.h; sourceTree = "<group>"; };
 		EE464FCF1E28B56A00137DCB /* HomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeVC.m; sourceTree = "<group>"; };
 		EE77A2FB1E20AF8E00A073BA /* user.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = user.plist; sourceTree = "<group>"; };
+		EE8C4CCD1E2DC325005D5D68 /* EmptyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmptyView.h; sourceTree = "<group>"; };
+		EE8C4CCE1E2DC325005D5D68 /* EmptyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmptyView.m; sourceTree = "<group>"; };
 		EEECC3781E20857B00362970 /* MNDownLoad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNDownLoad.h; sourceTree = "<group>"; };
 		EEECC3791E20857B00362970 /* MNDownLoad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNDownLoad.m; sourceTree = "<group>"; };
 		EEECC37B1E2085F400362970 /* AESEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESEncryption.h; sourceTree = "<group>"; };
@@ -239,6 +242,8 @@
 				820858FE1E1F822600989AD9 /* CarCollectionView.m */,
 				8216ED071E238AB600C5CB1C /* CustomView.h */,
 				8216ED081E238AB600C5CB1C /* CustomView.m */,
+				EE8C4CCD1E2DC325005D5D68 /* EmptyView.h */,
+				EE8C4CCE1E2DC325005D5D68 /* EmptyView.m */,
 			);
 			path = BaseView;
 			sourceTree = "<group>";
@@ -824,6 +829,7 @@
 				824B495E1E1B793B006D8C1F /* TaoCanDetailViewController.m in Sources */,
 				820EA17B1E12197000AE55BE /* main.m in Sources */,
 				820859361E1F82AD00989AD9 /* ErrorInfoUtility.m in Sources */,
+				EE8C4CCF1E2DC325005D5D68 /* EmptyView.m in Sources */,
 				820859341E1F82AD00989AD9 /* MyTeamViewController.m in Sources */,
 				EEECC3851E2085F400362970 /* JJHMD5Tool.m in Sources */,
 				8216ED091E238AB600C5CB1C /* CustomView.m in Sources */,

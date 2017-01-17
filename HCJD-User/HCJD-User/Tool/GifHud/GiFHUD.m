@@ -210,7 +210,6 @@ static GiFHUD *instance;
     }];
 }
 
-
 + (void)dismiss {
     if (![[self instance] shown])
         return;

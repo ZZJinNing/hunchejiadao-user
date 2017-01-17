@@ -132,7 +132,7 @@
     [param setObject:_passView.customTF.text forKey:@"password"];
     [_download POST:@"login" param:param success:^(NSDictionary *dic) {
         
-        NSLog(@"%@--%@",dic,dic[@"info"]);
+//        NSLog(@"%@--%@",dic,dic[@"info"]);
         
         NSString *info = dic[@"info"];
         NSInteger status = [dic[@"status"] integerValue];

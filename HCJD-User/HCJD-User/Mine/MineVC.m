@@ -143,7 +143,7 @@
 }
 #pragma mark--成为车主
 - (void)carOwnerViewClick{
-    NSLog(@"成为车主");
+//    NSLog(@"成为车主");
     CarOwnerVC *vc = [[CarOwnerVC alloc]init];
     vc.view.backgroundColor = grayBG;
     [self.navigationController pushViewController:vc animated:YES];
@@ -151,14 +151,14 @@
 }
 #pragma mark--我的车队
 - (void)myCarsViewClick{
-    NSLog(@"我的车队");
+//    NSLog(@"我的车队");
     MyTeamViewController *vc = [[MyTeamViewController alloc]init];
     vc.view.backgroundColor = grayBG;
     [self.navigationController pushViewController:vc animated:YES];
 }
 #pragma mark--我的收藏
 - (void)myFavoriteViewClick{
-    NSLog(@"我的收藏");
+//    NSLog(@"我的收藏");
     MyFavoriteVC *vc = [[MyFavoriteVC alloc]init];
     vc.view.backgroundColor = grayBG;
     [self.navigationController pushViewController:vc animated:YES];
@@ -166,7 +166,7 @@
 }
 #pragma mark--我的订单
 - (void)myOrderViewClick{
-    NSLog(@"我的订单");
+//    NSLog(@"我的订单");
     MyOrderVC *vc = [[MyOrderVC alloc]init];
     vc.view.backgroundColor = grayBG;
     [self.navigationController pushViewController:vc animated:YES];

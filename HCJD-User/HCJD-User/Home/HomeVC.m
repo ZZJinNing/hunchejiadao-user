@@ -16,7 +16,6 @@
 #import "ProductGroupModel.h"
 #import "homeTableViewCell.h"
 #import "homeTaoCanTableViewCell.h"
-
 #import "GiFHUD.h"
 
 
@@ -78,6 +77,10 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    NSString *number = [[NSUserDefaults standardUserDefaults]objectForKey:HCJDCart_num];
+    _carView.numberLable.text = number;
+    
+    
 }
 
 #pragma mark--请求获取车队数量

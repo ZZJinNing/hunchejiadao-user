@@ -23,6 +23,7 @@
     [self.window makeKeyWindow];
     
     self.window.rootViewController = [[TarbarViewController alloc]init];
+
     
     //注册高德8564a33da14879f6c8e326c64e155f0f  meiniu.cn  com.hunchejiadao.hc.driver
     [AMapServices sharedServices].apiKey = @"8564a33da14879f6c8e326c64e155f0f";

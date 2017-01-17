@@ -52,7 +52,7 @@
 - (void)getMessage{
     
     [_downLoad POST:@"userInfo" param:nil success:^(NSDictionary *dic) {
-        NSLog(@"%@",dic);
+//        NSLog(@"%@",dic);
         
         _phoneStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"phone"]];
         _photoUrl = [NSString stringWithFormat:@"%@",dic[@"return"][@"photo"]];
@@ -222,7 +222,7 @@
     [param setObject:_photoUrl forKey:@"photo"];
     
     [_downLoad POST:@"updatePhoto" param:param success:^(NSDictionary *dic) {
-        NSLog(@"%@",dic);
+//        NSLog(@"%@",dic);
     } failure:^(NSError *error) {
         
     } withSuperView:self];
@@ -252,12 +252,12 @@
         
         //打印上传进度
         CGFloat progress = 100.0 * uploadProgress.completedUnitCount / uploadProgress.totalUnitCount;
-        NSLog(@"%.2lf%%", progress);
+//        NSLog(@"%.2lf%%", progress);
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         //请求成功
-        NSLog(@"请求成功：%@===%@",responseObject,responseObject[@"info"]);
+//        NSLog(@"请求成功：%@===%@",responseObject,responseObject[@"info"]);
         
         NSString *url = responseObject[@"obj"][@"url"];
         

@@ -10,11 +10,12 @@
 #import "MyTeamTableViewCell.h"
 #import "MyTeamModel.h"
 #import "settlementMoneyViewController.h"
+#import "EmptyView.h"
 @interface MyTeamViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     UITableView *_tableView;
     NSMutableArray *_dataSource;
-   
+    EmptyView *_MyEmptyView;//数据源为空的时候显示
     //选中数组
     NSMutableArray *_selectedArray;
     //总价格
@@ -42,25 +43,49 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"我的车队";
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = grayBG;
     _dataSource = [[NSMutableArray alloc]init];
     _selectedArray = [NSMutableArray new];
     _totalPrice = 0.00;
     _dingjinPrice = 0.00;
     _selectAll = NO;
     _selectCellButton = NO;
-    
+     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getNotification) name:@"MN_getDataSource" object:nil];
     
     [self createTableView];
     [self getDataSource];
     //去结算界面
     [self settlementView];
     
+    
 }
-  
+
+- (void)getNotification{
+
+    
+    [_dataSource removeAllObjects];
+    [_selectedArray removeAllObjects];
+    [_tableView reloadData];
+    _dingjinPrice = 0.00;
+    _totalPrice = 0.00;
+    _selectAll = NO;
+    _selectCellButton = NO;
+    _dingjinLabel.text = @"定金:0.00元";
+    _AllPriceLabel.text = @"总价格:0.00元";
+    
+    [self getDataSource];
+    
+}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:@"MN_getDataSource"];
+}
+
+
 #pragma mark - 创建tableView
 - (void)createTableView{
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-124)];
+    _tableView.backgroundColor = grayBG;
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.rowHeight = 120;
@@ -71,14 +96,30 @@
 
 #pragma mark - 数据源
 - (void)getDataSource{
-    for (int i = 0; i < 20; i++) {
-        MyTeamModel *model = [[MyTeamModel alloc]init];
-        model.moneyStr = [NSString stringWithFormat:@"10%d",i];
-        model.numberStr = @"1";
-        model.hesderCarSelect = @"normal";
-        [_dataSource addObject:model];
-    }
-    [_tableView reloadData];
+    [_MyEmptyView removeFromSuperview];
+    [[MNDownLoad shareManager]POSTWithoutGitHUD:@"cartList" param:nil success:^(NSDictionary *dic) {
+
+        NSString *info = dic[@"info"];
+        NSString *status = [NSString stringWithFormat:@"%@",dic[@"status"]];
+        if ([status integerValue] == 1) {
+            NSArray *returnArray = dic[@"return"];
+            for (NSDictionary *returnDic in returnArray) {
+                MyTeamModel *model = [[MyTeamModel alloc]init];
+                [model parsingModelWithDictionary:returnDic];
+                [_dataSource addObject:model];
+            }
+        }else{
+            
+            _MyEmptyView = [[EmptyView alloc]initWithFrame:CGRectMake(0, 150, kScreenWidth, 200)];
+            [self.view addSubview:_MyEmptyView];
+            [MBProgressHUD showSuccess:info toView:self.view];
+        }
+        [_tableView reloadData];
+        
+    } failure:^(NSError *error) {
+        
+    } withSuperView:self];
+
 }
 
 #pragma mark - tableView代理事件
@@ -90,18 +131,15 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     MyTeamTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"teamCell" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.superController = self;
-    
     MyTeamModel *model = _dataSource[indexPath.row];
-    cell.moneyLabel.text = [NSString stringWithFormat:@"%@",model.moneyStr];
-    cell.numberLabel.text = model.numberStr;
+    [cell reloadDataWith:model WithSuperController:self];
+    
     
     if (_selectAll) {
         cell.selectedButton.selected = YES;
     }else{
         cell.selectedButton.selected = NO;
     }
-    
     __block MyTeamTableViewCell *weakCell = cell;
     //=====选中按钮事件=====
     cell.cartBlock = ^ (BOOL isSelect){
@@ -125,60 +163,92 @@
         
         [self CalculateTheTotalPrice];
     };
-   
     
-    //======点击用作车头按钮事件=============
-    cell.selectHeaderCarBlock = ^(NSString *select){
-        if ([select isEqualToString:@"select"]) {
-             weakCell.carImageView.image = [UIImage imageNamed:@"icon_bg_red"];
-            //选作车头
-            model.hesderCarSelect = @"select";
-            [_dataSource replaceObjectAtIndex:indexPath.row withObject:model];
-        }else if ([select isEqualToString:@"normal"]){
-            //不选作车头
-            weakCell.carImageView.image = [UIImage imageNamed:@"icon_bg_nor"];
-            model.hesderCarSelect = @"normal";
-            [_dataSource replaceObjectAtIndex:indexPath.row withObject:model];
-        }
-    };
-    
-    //========加好按钮事件=========
-    cell.addBlock = ^{
-        NSInteger count = [weakCell.numberLabel.text integerValue];
-        count++;
-        weakCell.numberLabel.text = [NSString stringWithFormat:@"%ld",count];
-        model.numberStr =  [NSString stringWithFormat:@"%ld",count];
-        [_dataSource replaceObjectAtIndex:indexPath.row withObject:model];
-        if ([_selectedArray containsObject:model]) {
-            [_selectedArray removeObject:model];
-            [_selectedArray addObject:model];
-            [self CalculateTheTotalPrice];
-        }
+    //========点击删除按钮==========
+    cell.delegeBlock = ^{
+        [_dataSource removeAllObjects];
+        [_selectedArray removeAllObjects];
+        [_tableView reloadData];
+        _dingjinPrice = 0.00;
+        _totalPrice = 0.00;
+        _selectAll = NO;
+        _selectCellButton = NO;
+        _dingjinLabel.text = @"定金:0.00元";
+        _AllPriceLabel.text = @"总价格:0.00元";
         
+        [self getDataSource];
     };
+    
+    if ([model.headerCarSelect isEqualToString:@"normal"]) {
+        
+        NSString *product_id = model.product_id;
+        
+        //========加号按钮事件=========
+        cell.addBlock = ^{
+            NSInteger count = [weakCell.numberLabel.text integerValue];
+            count++;
+            NSString *productNum = [NSString stringWithFormat:@"%ld",count];
+            NSDictionary *param = @{@"product_id":product_id,@"product_num":productNum};
+            [[MNDownLoad shareManager]POSTWithOutHUD:@"cartProductNum" param:param success:^(NSDictionary *dic) {
+                NSString *status = [NSString stringWithFormat:@"%@",dic[@"status"]];
+                NSString *info = dic[@"info"];
+                if ([status integerValue] == 1) {
+                    weakCell.numberLabel.text = [NSString stringWithFormat:@"%ld",count];
+                    model.numberStr =  [NSString stringWithFormat:@"%ld",count];
+                    [_dataSource replaceObjectAtIndex:indexPath.row withObject:model];
+                    if ([_selectedArray containsObject:model]) {
+                        [_selectedArray removeObject:model];
+                        [_selectedArray addObject:model];
+                        [self CalculateTheTotalPrice];
+                    }
+                }else{
+                    [MBProgressHUD showSuccess:info toView:self.view];
+                }
+            } failure:^(NSError *error) {
+                
+            } withSuperView:self];
+            
+           
+            
+        };
+        //=======点击减号=============
+        cell.cutBlock = ^ {
+            NSInteger count = [weakCell.numberLabel.text integerValue];
+            count--;
+            if (count <= 0) {
+                return ;
+            }
+            
+            NSString *productNum = [NSString stringWithFormat:@"%ld",count];
+            NSDictionary *param = @{@"product_id":product_id,@"product_num":productNum};
+            [[MNDownLoad shareManager]POSTWithOutHUD:@"cartProductNum" param:param success:^(NSDictionary *dic) {
+                NSString *status = [NSString stringWithFormat:@"%@",dic[@"status"]];
+                NSString *info = dic[@"info"];
+                if ([status integerValue] == 1) {
+                    weakCell.numberLabel.text = [NSString stringWithFormat:@"%ld",count];
+                    model.numberStr =  [NSString stringWithFormat:@"%ld",count];
+                    [_dataSource replaceObjectAtIndex:indexPath.row withObject:model];
+                    if ([_selectedArray containsObject:model]) {
+                        [_selectedArray removeObject:model];
+                        [_selectedArray addObject:model];
+                        [self CalculateTheTotalPrice];
+                    }
+                }else{
+                    [MBProgressHUD showSuccess:info toView:self.view];
+                }
+            } failure:^(NSError *error) {
+                
+            } withSuperView:self];
+            
+            
+        };
 
-    //=======点击减号=============
-    cell.cutBlock = ^ {
-        NSInteger count = [weakCell.numberLabel.text integerValue];
-        count--;
-        if (count <= 0) {
-            return ;
-        }
-        weakCell.numberLabel.text = [NSString stringWithFormat:@"%ld",count];
-        model.numberStr =  [NSString stringWithFormat:@"%ld",count];
-        [_dataSource replaceObjectAtIndex:indexPath.row withObject:model];
-        if ([_selectedArray containsObject:model]) {
-            [_selectedArray removeObject:model];
-            [_selectedArray addObject:model];
-            [self CalculateTheTotalPrice];
-        }
-        
-    };
+    }
     
-    [cell reloadDataWith:model];
-    
+   
     return cell;
 }
+
 
 
 #pragma mark - 最底部[去结算]界面
@@ -226,7 +296,7 @@
     _dingjinLabel.textColor = kRGBA(249, 30, 51, 1);
     _dingjinLabel.textAlignment = NSTextAlignmentRight;
     _dingjinLabel.adjustsFontSizeToFitWidth = YES;
-    _dingjinLabel.text = [NSString stringWithFormat:@"定金:%.2f",_dingjinPrice];
+    _dingjinLabel.text = @"定金:0.00元";
     [bgView addSubview:_dingjinLabel];
     _dingjinLabel.sd_layout
     .topSpaceToView(bgView,5)
@@ -238,7 +308,7 @@
     _AllPriceLabel.textAlignment = NSTextAlignmentRight;
     _AllPriceLabel.textColor = wordColorDark;
     _AllPriceLabel.adjustsFontSizeToFitWidth = YES;
-    _AllPriceLabel.text = [NSString stringWithFormat:@"总价格:%.2f",_totalPrice];
+    _AllPriceLabel.text = @"总价格:0.00元";
     [bgView addSubview:_AllPriceLabel];
     _AllPriceLabel.sd_layout
     .topSpaceToView(_dingjinLabel,-5)
@@ -280,14 +350,20 @@
 
 //====计算价格===
 - (void)CalculateTheTotalPrice{
-    float totalMoney ;
+    float dingjinTotalMoney = 0 ;//定金
+    float allTotalMoney = 0;//总价
     for (MyTeamModel *model in _selectedArray) {
-        float price = [model.moneyStr floatValue];
+        float DingjinPrice = [model.moneyStr floatValue];
+        float allMoney = [model.allMoneyStr floatValue];
         NSInteger count = [model.numberStr integerValue];
-        totalMoney += price * count;
+        dingjinTotalMoney += DingjinPrice * count;
+        allTotalMoney += allMoney * count;
+     
     }
-    _totalPrice = totalMoney;
-    _AllPriceLabel.text = [NSString stringWithFormat:@"总价格:%.2f",_totalPrice];
+    _dingjinPrice = dingjinTotalMoney;
+    _dingjinLabel.text = [NSString stringWithFormat:@"定金:%.2f元",_dingjinPrice];
+    _totalPrice = allTotalMoney;
+    _AllPriceLabel.text = [NSString stringWithFormat:@"总价格:%.2f元",_totalPrice];
 }
 
 #pragma mark - 结算按钮事件
@@ -306,7 +382,6 @@
         vc.dataSource = [NSArray arrayWithArray:_selectedArray];
         vc.dingjinStr = [NSString stringWithFormat:@"%.2f",_dingjinPrice];
         vc.allMoneyStr = [NSString stringWithFormat:@"%.2f",_totalPrice];;
-        
         [self.navigationController pushViewController:vc animated:YES];
     }
    

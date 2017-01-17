@@ -12,8 +12,9 @@
 typedef void(^slectedBlock) (BOOL select);
 //数量改变的block
 typedef void(^changeBlock) ();
-//是否用着头车
-typedef void(^headerCarBlock) (NSString *);
+
+//删除
+typedef void (^delegeButtonBlock) ();
 
 @interface MyTeamTableViewCell : UITableViewCell
 
@@ -23,8 +24,16 @@ typedef void(^headerCarBlock) (NSString *);
 @property (nonatomic)changeBlock cutBlock;
 //➕
 @property (nonatomic)changeBlock addBlock;
-//是否用着头车
-@property (nonatomic)headerCarBlock selectHeaderCarBlock;
+//加好按钮
+@property (nonatomic)UIButton *addBtn;
+//减号按钮
+@property (nonatomic)UIButton *cutButton;
+
+//删除
+@property (nonatomic)delegeButtonBlock delegeBlock;
+
+
+
 
 
 //选着按钮
@@ -43,16 +52,13 @@ typedef void(^headerCarBlock) (NSString *);
 @property (nonatomic,strong)UIImageView *carImageView;
 //删除按钮
 @property (nonatomic,strong)UIButton *deleteButton;
-
-//父视图
-@property (nonatomic)UIViewController *superController;
-
+ 
 //是否被选中按钮
 @property (nonatomic,assign)BOOL isSelected;
 
 
 
--(void)reloadDataWith:(MyTeamModel*)model;
+-(void)reloadDataWith:(MyTeamModel*)model WithSuperController:(UIViewController*)superController;
 
 
 

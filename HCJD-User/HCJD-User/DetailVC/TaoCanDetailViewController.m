@@ -212,7 +212,7 @@
     [param setObject:@"group" forKey:@"type"];
     [_downLoad POST:@"collectSwitch" param:param success:^(NSDictionary *dic) {
         
-        NSLog(@"%@",dic);
+//        NSLog(@"%@",dic);
         
     } failure:^(NSError *error) {
         
@@ -323,7 +323,7 @@
     
     [_downLoad POST:@"cartAddGroup" param:param success:^(NSDictionary *dic) {
         
-        NSLog(@"%@",dic);
+//        NSLog(@"%@",dic);
         
         NSInteger status = [dic[@"status"] integerValue];
         if (status == -2) {

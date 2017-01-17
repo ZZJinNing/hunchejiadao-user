@@ -17,10 +17,11 @@
 
 #import "ProductModel.h"
 #import "ProductGroupModel.h"
-
+#import "EmptyView.h"//数据源为空的时候显示的view
 
 @interface FindCarVC ()<UITableViewDelegate,UITableViewDataSource>{
     
+    EmptyView *_MyEmptyView;
     UITableView *_findSelfTableView;//自选
     
     UITableView *_findTableView;//套餐
@@ -88,15 +89,12 @@
 
 #pragma mark--数据源
 - (void)getDataWithCtl:(NSString *)ctl withTableView:(UITableView *)tableview{
-    
+    [_MyEmptyView removeFromSuperview];
     //数据模块
-    
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:[NSString stringWithFormat:@"%ld",(long)page]  forKey:@"page"];
     
     [_downLoad POST:ctl param:param success:^(NSDictionary *dic) {
-        
-//        NSLog(@"%@---%@---%@",dic,dic[@"info"],param);
         
         NSArray *returnArr = dic[@"return"];
         if (!kArrayIsEmpty(returnArr)) {
@@ -112,6 +110,9 @@
                     [_modelArr addObject:model];
                 }
             }
+        }else{
+            _MyEmptyView = [[EmptyView alloc]initWithFrame:CGRectMake(0, 150, kScreenWidth, 150)];
+            [self.view addSubview:_MyEmptyView];
         }
         
         [tableview reloadData];
@@ -145,7 +146,7 @@
 #pragma mark--创建UISegmentedControl（分段控制）
 - (void)createSgcView{
     segmentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 64)];
-    segmentView.backgroundColor = [UIColor whiteColor];
+    segmentView.backgroundColor = grayBG;
     [self.view addSubview:segmentView];
     
     UISegmentedControl *sgc = [[UISegmentedControl alloc]initWithItems:@[@"自选车",@"套餐"]];
@@ -173,7 +174,7 @@
         _flag = 0;
         
         //自选
-        NSLog(@"-----%ld",(long)sgc.selectedSegmentIndex);
+//        NSLog(@"-----%ld",(long)sgc.selectedSegmentIndex);
         
         [_findTableView removeFromSuperview];//移除套餐
         
@@ -192,7 +193,7 @@
         _flag = 1;
         
         //套餐
-        NSLog(@"=====%ld",(long)sgc.selectedSegmentIndex);
+//        NSLog(@"=====%ld",(long)sgc.selectedSegmentIndex);
         
         [_findSelfTableView removeFromSuperview];//移除自选
         

@@ -65,7 +65,7 @@
     [param setObject:@"1" forKey:@"page"];
     [_downLoad POST:@"collectList" param:param success:^(NSDictionary *dic) {
         
-        NSLog(@"%@",dic);
+//        NSLog(@"%@",dic);
         
         NSArray *returnArr = dic[@"return"];
         if (!kArrayIsEmpty(returnArr)) {
