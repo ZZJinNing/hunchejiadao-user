@@ -316,7 +316,7 @@
     
     [_downLoad POST:@"cartAddGroup" param:param success:^(NSDictionary *dic) {
         
-        NSLog(@"%@",dic);
+//        NSLog(@"%@",dic);
         
         NSInteger status = [dic[@"status"] integerValue];
         if (status == -2) {
