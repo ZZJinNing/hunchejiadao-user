@@ -37,8 +37,7 @@
     }
     return self;
 }
-
-//================布局界面==============
+#pragma mark--布局界面
 - (void)layoutUI{
     UIView *view = [[UIView alloc]init];
     view.backgroundColor = [UIColor whiteColor];
@@ -173,28 +172,27 @@
 
 }
 
-
-//选中按钮事件
+#pragma mark--选中按钮事件
 - (void)selectBTN:(UIButton*)button{
     button.selected = !button.selected;
     if (self.cartBlock) {
         self.cartBlock(button.selected);
     }
 }
-//点击减号按钮事件
+#pragma mark--点击减号按钮事件
 - (void)cutBtnClick{
     if (self.cutBlock) {
         self.cutBlock();
     }
 }
-//点击加好按钮事件
+#pragma mark--点击加好按钮事件
 - (void)addBtnClick{
     if (self.addBlock) {
         self.addBlock();
     }
 }
 
-//是否用作头车
+#pragma mark--是否用作头车
 - (void)headerCarSelected{
     if ([_MySelected isEqualToString:@"normal"]) {
         _MySelected = @"select";
@@ -209,7 +207,7 @@
     }
 
 }
-//删除按钮
+#pragma mark--删除按钮
 - (void)MYDeleteButton{
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"您确定要删除数据吗" preferredStyle:UIAlertControllerStyleAlert];
     

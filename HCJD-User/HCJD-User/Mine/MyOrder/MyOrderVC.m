@@ -11,6 +11,13 @@
 #import "OrderDetailVC.h"
 
 @interface MyOrderVC ()<UITableViewDelegate,UITableViewDataSource>{
+    
+    MNDownLoad *_downLoad;
+    
+    NSMutableArray *_orderArr;//订单数组
+    
+    
+    
     UITableView *_orderTableView;
     UISegmentedControl *_sgc;
     UILabel *_line;//红线
@@ -27,10 +34,29 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"我的订单";
+    
+    _downLoad = [MNDownLoad shareManager];
+    
     [self createSgcView];
     
+    [self getDataSourceWithType:@"all"];
+}
+#pragma mark--数据源
+- (void)getDataSourceWithType:(NSString *)type{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:type forKey:@"type"];
+    [_downLoad POST:@"orderList" param:param success:^(NSDictionary *dic) {
+        
+        NSLog(@"%@",dic);
+        
+        
+    } failure:^(NSError *error) {
+        
+    } withSuperView:self];
     
 }
+#pragma mark--分段控制器
 - (void)createSgcView{
     _sgc = [[UISegmentedControl alloc]initWithItems:@[@"所有订单",@"等待配车",@"等待用车",@"已完成"]];
     //设置大小和位置
@@ -84,6 +110,7 @@
     
     
 }
+#pragma mark--分段显示订单的不同状态
 - (void)changeIndex:(UISegmentedControl *)sgc{
     _line.sd_layout
     .topSpaceToView(sgc,0)
@@ -94,8 +121,20 @@
     [self.view layoutSubviews];
     
     
+    if (sgc.selectedSegmentIndex == 0) {//所有
+        [self getDataSourceWithType:@"all"];
+    }else if (sgc.selectedSegmentIndex == 1){//等待配车
+        [self getDataSourceWithType:@"no_match"];
+    }else if (sgc.selectedSegmentIndex == 2){//等待用车
+        [self getDataSourceWithType:@"no_use"];
+    }else{//已完成
+        [self getDataSourceWithType:@"is_finish"];
+    }
+    
+    
+    
 }
-
+#pragma mark--TableView代理方法
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 1;
 }

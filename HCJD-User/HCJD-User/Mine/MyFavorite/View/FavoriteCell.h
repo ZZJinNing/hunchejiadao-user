@@ -10,8 +10,15 @@
 #import "ProductModel.h"
 #import "ProductGroupModel.h"
 
+typedef void(^cancelFavoriteBlock)();
 
 @interface FavoriteCell : UITableViewCell
+
+/*
+ *取消收藏
+ */
+@property (nonatomic)cancelFavoriteBlock cancelBlock;
+
 /*
  *ID
  */

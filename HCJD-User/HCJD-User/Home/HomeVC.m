@@ -17,8 +17,12 @@
 #import "homeTableViewCell.h"
 #import "homeTaoCanTableViewCell.h"
 
-#import "GiFHUD.h"
 
+typedef NS_ENUM(NSInteger,Refresh_Status) {
+    Refresh_normal = 0,//不刷新状态
+    Refresh_Head,//下拉刷新
+    Refresh_Foot //上拉加载
+};
 
 @interface HomeVC ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -46,9 +50,13 @@
     //套餐产品model数据
     NSMutableArray *_groupArr;
     
-    NSInteger cart_num;//车队数量
+    //车队数量
+    NSInteger cart_num;
     
-    CarCollectionView *_carView;//车队数量视图
+    //车队数量视图
+    CarCollectionView *_carView;
+    
+    Refresh_Status _refreshStatus;//刷新状态
     
 }
 @end
@@ -74,11 +82,48 @@
     //请求获取车队数量
     [self getCartNum];
     
+    //刷新功能
+    [self addMJRefresh];
+    
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
+
+#pragma mark--设置刷新
+- (void)addMJRefresh{
+    //下拉刷新
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self headRefresh];
+    }];
+    //设置刷新提示语句
+    [header setTitle:@"继续下拉可进行刷新" forState:MJRefreshStateIdle];
+    [header setTitle:@"松开可刷新" forState:MJRefreshStatePulling];
+    [header setTitle:@"正在刷新中" forState:MJRefreshStateRefreshing];
+    //设置字体和文字
+    header.stateLabel.font=[UIFont systemFontOfSize:13];
+    
+    //设置蚊子颜色
+    header.stateLabel.textColor=[UIColor redColor];
+    
+    //设置隐藏
+    header.stateLabel.textColor=[UIColor redColor];
+    
+    //最后一次刷新时间是否隐藏
+    header.lastUpdatedTimeLabel.hidden=YES;
+    _tableView.mj_header = header;
+}
+- (void)headRefresh{
+    
+    //修改刷新状态
+    _refreshStatus = Refresh_Head;
+    //进入刷新状态
+    [_tableView.mj_header beginRefreshing];
+    //获取第一页的数据
+    [self getDataSource];//套餐数据
+}
+
 
 #pragma mark--请求获取车队数量
 - (void)getCartNum{
@@ -93,8 +138,6 @@
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%ld",(long)cart_num] forKey:HCJDCart_num];
     }else{
         [[MNDownLoad shareManager] POSTWithoutGitHUD:@"cartNum" param:nil success:^(NSDictionary *dic) {
-            
-//            NSLog(@"%@",dic);
             
             NSInteger status = [dic[@"status"] integerValue];
             if (status == 1) {
@@ -148,7 +191,12 @@
     
     [[MNDownLoad shareManager] POST:@"indexData" param:nil success:^(NSDictionary *dic) {
         
-//        NSLog(@"%@",dic);
+        if (_refreshStatus == Refresh_Head) {
+            [_tableView.mj_header endRefreshing];
+            //清理数据源
+            [_dataSource removeAllObjects];
+        }
+        _refreshStatus = Refresh_normal;
         
         //背景图url
         _bgImageStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"ad_info"][@"image"]];
@@ -190,7 +238,6 @@
         }else{
             _groupArr = @[].mutableCopy;
         }
-        
         
         //将数据源数组添加到_dataSource,用来确认区数
         [_dataSource addObject:_productArr];

@@ -189,7 +189,6 @@
     [param setObject:_yanzhengTF.text forKey:@"code"];
     
     [_download POST:@"register" param:param success:^(NSDictionary *dic) {
-//        NSLog(@"%@",dic);
         
         NSString *info = dic[@"info"];
         NSInteger status = [dic[@"status"] integerValue];
@@ -213,7 +212,6 @@
     [param setObject:_accountView.customTF.text forKey:@"phone"];
     
     [_download POST:@"sendSmsCode" param:param success:^(NSDictionary *dic) {
-//        NSLog(@"%@",dic);
         NSString *info = dic[@"info"];
         NSInteger status = [dic[@"status"] integerValue];
         if (status == 1) {

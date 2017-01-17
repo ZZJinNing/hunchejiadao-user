@@ -1,13 +1,13 @@
 //
-//  cityModel.m
+//  CityModel.m
 //  HCJD-User
 //
-//  Created by jiang on 17/1/10.
+//  Created by ZhangZi Long on 17/1/16.
 //  Copyright © 2017年 JinNing. All rights reserved.
 //
 
-#import "cityModel.h"
+#import "CityModel.h"
 
-@implementation cityModel
+@implementation CityModel
 
 @end

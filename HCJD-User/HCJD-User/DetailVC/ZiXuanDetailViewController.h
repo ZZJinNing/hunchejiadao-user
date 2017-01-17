@@ -9,7 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "ProductModel.h"
 
+typedef void(^ZiXuanBlock)();
+
 @interface ZiXuanDetailViewController : UIViewController
+
+@property(nonatomic)ZiXuanBlock changeFavoriteBlock;
+
 @property(nonatomic,retain)ProductModel *productModel;
 
 @end

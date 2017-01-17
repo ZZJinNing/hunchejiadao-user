@@ -52,7 +52,6 @@
 - (void)getMessage{
     
     [_downLoad POST:@"userInfo" param:nil success:^(NSDictionary *dic) {
-        NSLog(@"%@",dic);
         
         _phoneStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"phone"]];
         _photoUrl = [NSString stringWithFormat:@"%@",dic[@"return"][@"photo"]];
@@ -222,7 +221,6 @@
     [param setObject:_photoUrl forKey:@"photo"];
     
     [_downLoad POST:@"updatePhoto" param:param success:^(NSDictionary *dic) {
-        NSLog(@"%@",dic);
     } failure:^(NSError *error) {
         
     } withSuperView:self];
@@ -294,7 +292,6 @@
 - (void)logoutApp{
     
     [_downLoad POST:@"logout" param:nil success:^(NSDictionary *dic) {
-//        NSLog(@"%@--%@",dic,dic[@"info"]);
         
         NSInteger status = [dic[@"status"] integerValue];
         

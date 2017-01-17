@@ -90,7 +90,7 @@
     [myOrderView addGestureRecognizer:orderTarget];
     
 }
-//创建添加了点击事件的view（车主，车队，收藏，订单）
+#pragma mark--创建添加了点击事件的view（车主，车队，收藏，订单）
 - (UIView *)createClickViewWith:(id)topView withImageName:(NSString *)imageName withTitle:(NSString *)title withTopFloat:(CGFloat)space withLeftToView:(UIView *)LeftView{
     UIView *mineview = [[UIView alloc]init];
     [self.view addSubview:mineview];
@@ -138,7 +138,6 @@
         LoginVC *vc = [[LoginVC alloc]init];
         vc.view.backgroundColor = grayBG;
         [self presentViewController:vc animated:YES completion:nil];
-//        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 #pragma mark--成为车主

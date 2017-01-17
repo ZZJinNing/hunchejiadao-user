@@ -10,9 +10,11 @@
 #import "MyTeamTableViewCell.h"
 #import "MyTeamModel.h"
 #import "settlementMoneyViewController.h"
+
 @interface MyTeamViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     UITableView *_tableView;
+    
     NSMutableArray *_dataSource;
    
     //选中数组
@@ -31,8 +33,10 @@
     UILabel *_dingjinLabel;
     //全选按钮
     UIButton *_selectedButton;
+    
 } 
 @end
+
 @implementation MyTeamViewController
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -50,14 +54,14 @@
     _selectAll = NO;
     _selectCellButton = NO;
     
-    
     [self createTableView];
+    
     [self getDataSource];
     //去结算界面
     [self settlementView];
     
 }
-  
+
 #pragma mark - 创建tableView
 - (void)createTableView{
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-124)];
@@ -142,7 +146,7 @@
         }
     };
     
-    //========加好按钮事件=========
+    //========加号按钮事件=========
     cell.addBlock = ^{
         NSInteger count = [weakCell.numberLabel.text integerValue];
         count++;

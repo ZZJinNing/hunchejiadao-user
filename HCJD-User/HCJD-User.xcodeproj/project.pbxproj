@@ -48,6 +48,7 @@
 		82359F9B1E1DE006000D11C7 /* MyOrderVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 82359F9A1E1DE006000D11C7 /* MyOrderVC.m */; };
 		82359F9E1E1E1405000D11C7 /* CarOwnerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 82359F9D1E1E1405000D11C7 /* CarOwnerVC.m */; };
 		82359FA11E1E2916000D11C7 /* KeFuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 82359FA01E1E2916000D11C7 /* KeFuVC.m */; };
+		8239FC661E2CAE5E00F22BA6 /* CityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8239FC651E2CAE5E00F22BA6 /* CityModel.m */; };
 		824484931E1C9588000A1E3B /* ChangeNickNameVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 824484921E1C9588000A1E3B /* ChangeNickNameVC.m */; };
 		824484961E1C9EDB000A1E3B /* ChangePasswordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 824484951E1C9EDB000A1E3B /* ChangePasswordVC.m */; };
 		8244849A1E1CBE73000A1E3B /* CountDown.m in Sources */ = {isa = PBXBuildFile; fileRef = 824484991E1CBE73000A1E3B /* CountDown.m */; };
@@ -62,7 +63,6 @@
 		82FE2E001E2717D600A319B9 /* GestureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FE2DFF1E2717D600A319B9 /* GestureView.m */; };
 		82FE2E031E2756DD00A319B9 /* DetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FE2E021E2756DD00A319B9 /* DetailModel.m */; };
 		82FE2E061E2756EC00A319B9 /* DetailGroupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FE2E051E2756EC00A319B9 /* DetailGroupModel.m */; };
-		EE464FD01E28B56A00137DCB /* cityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FBC1E28B56A00137DCB /* cityModel.m */; };
 		EE464FD11E28B56A00137DCB /* CityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FBE1E28B56A00137DCB /* CityViewController.m */; };
 		EE464FD51E28B56A00137DCB /* homeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE464FC61E28B56A00137DCB /* homeTableViewCell.xib */; };
 		EE464FD71E28B56A00137DCB /* homeTaoCanTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE464FCA1E28B56A00137DCB /* homeTaoCanTableViewCell.m */; };
@@ -156,6 +156,8 @@
 		82359F9D1E1E1405000D11C7 /* CarOwnerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarOwnerVC.m; sourceTree = "<group>"; };
 		82359F9F1E1E2916000D11C7 /* KeFuVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeFuVC.h; sourceTree = "<group>"; };
 		82359FA01E1E2916000D11C7 /* KeFuVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeFuVC.m; sourceTree = "<group>"; };
+		8239FC641E2CAE5E00F22BA6 /* CityModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CityModel.h; sourceTree = "<group>"; };
+		8239FC651E2CAE5E00F22BA6 /* CityModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CityModel.m; sourceTree = "<group>"; };
 		824484911E1C9588000A1E3B /* ChangeNickNameVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeNickNameVC.h; sourceTree = "<group>"; };
 		824484921E1C9588000A1E3B /* ChangeNickNameVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeNickNameVC.m; sourceTree = "<group>"; };
 		824484941E1C9EDB000A1E3B /* ChangePasswordVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordVC.h; sourceTree = "<group>"; };
@@ -184,8 +186,6 @@
 		82FE2E041E2756EC00A319B9 /* DetailGroupModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailGroupModel.h; sourceTree = "<group>"; };
 		82FE2E051E2756EC00A319B9 /* DetailGroupModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailGroupModel.m; sourceTree = "<group>"; };
 		842147DA8B01130BC9CF5D73 /* Pods-HCJD-User.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HCJD-User.release.xcconfig"; path = "Pods/Target Support Files/Pods-HCJD-User/Pods-HCJD-User.release.xcconfig"; sourceTree = "<group>"; };
-		EE464FBB1E28B56A00137DCB /* cityModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cityModel.h; sourceTree = "<group>"; };
-		EE464FBC1E28B56A00137DCB /* cityModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cityModel.m; sourceTree = "<group>"; };
 		EE464FBD1E28B56A00137DCB /* CityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CityViewController.h; sourceTree = "<group>"; };
 		EE464FBE1E28B56A00137DCB /* CityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CityViewController.m; sourceTree = "<group>"; };
 		EE464FC61E28B56A00137DCB /* homeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = homeTableViewCell.xib; sourceTree = "<group>"; };
@@ -591,8 +591,8 @@
 		EE464FBA1E28B56A00137DCB /* CityVC */ = {
 			isa = PBXGroup;
 			children = (
-				EE464FBB1E28B56A00137DCB /* cityModel.h */,
-				EE464FBC1E28B56A00137DCB /* cityModel.m */,
+				8239FC641E2CAE5E00F22BA6 /* CityModel.h */,
+				8239FC651E2CAE5E00F22BA6 /* CityModel.m */,
 				EE464FBD1E28B56A00137DCB /* CityViewController.h */,
 				EE464FBE1E28B56A00137DCB /* CityViewController.m */,
 			);
@@ -806,11 +806,11 @@
 				820EA1BE1E1261E900AE55BE /* HCYXCell.m in Sources */,
 				820EA1A21E121BC700AE55BE /* FindCarVC.m in Sources */,
 				820EA1A51E121BD300AE55BE /* MineVC.m in Sources */,
+				8239FC661E2CAE5E00F22BA6 /* CityModel.m in Sources */,
 				EE464FD71E28B56A00137DCB /* homeTaoCanTableViewCell.m in Sources */,
 				820859371E1F82AD00989AD9 /* mapViewController.m in Sources */,
 				824484931E1C9588000A1E3B /* ChangeNickNameVC.m in Sources */,
 				820EA1951E1219EE00AE55BE /* CustomNavigationController.m in Sources */,
-				EE464FD01E28B56A00137DCB /* cityModel.m in Sources */,
 				8208593A1E1F82AD00989AD9 /* settlementTableViewCell.m in Sources */,
 				8216ED031E235FCE00C5CB1C /* ForgetPassVC.m in Sources */,
 				8284DFBA1E28CC8900F367E3 /* homeTableViewCell.m in Sources */,

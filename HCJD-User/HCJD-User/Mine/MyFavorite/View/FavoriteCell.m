@@ -22,6 +22,9 @@
     self.noFavoriteBtn.layer.cornerRadius = 3;
     self.noFavoriteBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
     self.noFavoriteBtn.layer.borderWidth = 1;
+    //取消收藏
+    [self.noFavoriteBtn addTarget:self action:@selector(noFavoriteBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    
     
     self.leftImageView.layer.cornerRadius = 3;
     self.leftImageView.layer.masksToBounds = YES;
@@ -61,6 +64,13 @@
     //头车
     self.headCarLabel.text = [NSString stringWithFormat:@"%@",groupModel.header_car];
     
+    
+}
+//取消收藏
+- (void)noFavoriteBtnClick{
+    if (self.cancelBlock) {
+        self.cancelBlock();
+    }
 }
 
 //判断是否是套餐，是否隐藏头车和套餐标签
