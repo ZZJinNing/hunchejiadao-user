@@ -19,6 +19,13 @@
 #import "ProductGroupModel.h"
 #import "EmptyView.h"//数据源为空的时候显示的view
 
+typedef NS_ENUM(NSInteger,Refresh_Status) {
+    Refresh_normal = 0,//不刷新状态
+    Refresh_Head,//下拉刷新
+    Refresh_Foot //上拉加载
+};
+
+
 @interface FindCarVC ()<UITableViewDelegate,UITableViewDataSource>{
     
     EmptyView *_MyEmptyView;
@@ -34,10 +41,11 @@
     
     MNDownLoad *_downLoad;
     
-    NSInteger page;//当前页
-    NSInteger pages;//总页数
-    
     NSMutableArray *_modelArr;
+    
+    NSInteger currentPage;//当前页
+    NSInteger maxPages;//总页数
+    Refresh_Status _refreshStatus;//刷新状态
     
 }
 
@@ -81,23 +89,127 @@
     
     _downLoad = [MNDownLoad shareManager];
     
-    
-    page = 0;//默认初始第一页
+//    currentPage = 0;//默认初始第一页
     
 }
 
+#pragma mark--设置刷新
+- (void)addMJRefreshWithTableView:(UITableView *)tableView{
+    //下拉刷新
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self headRefresh];
+    }];
+    //设置刷新提示语句
+    [header setTitle:@"继续下拉可进行刷新" forState:MJRefreshStateIdle];
+    [header setTitle:@"松开可刷新" forState:MJRefreshStatePulling];
+    [header setTitle:@"正在刷新中" forState:MJRefreshStateRefreshing];
+    //设置字体和文字
+    header.stateLabel.font=[UIFont systemFontOfSize:13];
+    
+    //设置蚊子颜色
+    header.stateLabel.textColor=[UIColor redColor];
+    
+    //设置隐藏
+    header.stateLabel.textColor=[UIColor redColor];
+    
+    //最后一次刷新时间是否隐藏
+    header.lastUpdatedTimeLabel.hidden=YES;
+    tableView.mj_header = header;
+    
+    
+    //上拉加载
+    MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        [self footRefresh];
+    }];
+    // 设置文字
+    [footer setTitle:@"" forState:MJRefreshStateIdle];
+    [footer setTitle:@"加载中..." forState:MJRefreshStateRefreshing];
+    // 设置字体
+    footer.stateLabel.font = [UIFont systemFontOfSize:13];
+    // 设置颜色
+    footer.stateLabel.textColor = [UIColor grayColor];
+    tableView.mj_footer = footer;
+}
+
+- (void)headRefresh{
+    //当前页从零开始
+    currentPage = 0;
+    //修改刷新状态
+    _refreshStatus = Refresh_Head;
+    
+    if (_flag == 0) {
+        //进入刷新状态
+        [_findSelfTableView.mj_header beginRefreshing];
+        //获取第一页的数据
+        [self getDataWithCtl:@"productList" withTableView:_findSelfTableView];//自选数据
+    }else{
+        //进入刷新状态
+        [_findTableView.mj_header beginRefreshing];
+        //获取第一页的数据
+        [self getDataWithCtl:@"productGroupList" withTableView:_findTableView];//套餐数据
+    }
+}
+- (void)footRefresh{
+    //如果当前页大于最大页数，停止加载
+    if (currentPage > maxPages-1) {
+        if (_flag == 0) {
+            [_findSelfTableView.mj_footer endRefreshing];
+        }else{
+            [_findTableView.mj_footer endRefreshing];
+        }
+    }else{//如果当前页小于最大页数，继续加载
+        //修改刷新状态
+        _refreshStatus = Refresh_Foot;
+        if (_flag == 0) {
+            //进入加载状态
+            [_findSelfTableView.mj_footer beginRefreshing];
+            //获取下一页数据自选数据
+            [self getDataWithCtl:@"productList" withTableView:_findSelfTableView];
+        }else{
+            //进入加载状态
+            [_findTableView.mj_footer beginRefreshing];
+            //获取下一页数据套餐数据
+            [self getDataWithCtl:@"productGroupList" withTableView:_findSelfTableView];
+        }
+    }
+}
 
 #pragma mark--数据源
 - (void)getDataWithCtl:(NSString *)ctl withTableView:(UITableView *)tableview{
+
     [_MyEmptyView removeFromSuperview];
+
+    
+    currentPage++;
+    
+
     //数据模块
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:[NSString stringWithFormat:@"%ld",(long)page]  forKey:@"page"];
+    [param setObject:[NSString stringWithFormat:@"%ld",(long)currentPage]  forKey:@"page"];
     
     [_downLoad POST:ctl param:param success:^(NSDictionary *dic) {
         
+
+
+//        NSLog(@"%@---%@---%@",dic,dic[@"info"],param);
+        
+        //最大页数
+        maxPages = [dic[@"page_pages"] integerValue];
+        
+
         NSArray *returnArr = dic[@"return"];
         if (!kArrayIsEmpty(returnArr)) {
+            
+            if (_refreshStatus == Refresh_Head) {
+                [tableview.mj_header endRefreshing];
+                //清理数据源
+                [_modelArr removeAllObjects];
+            }else if (_refreshStatus == Refresh_Foot){
+                [tableview.mj_footer endRefreshing];
+            }
+            
+            _refreshStatus = Refresh_normal;
+            
             for (NSDictionary *productDic in returnArr) {
                 //判断ctl
                 if ([ctl isEqualToString:@"productList"]) {
@@ -110,13 +222,15 @@
                     [_modelArr addObject:model];
                 }
             }
+  
+            [tableview reloadData];
         }else{
             _MyEmptyView = [[EmptyView alloc]initWithFrame:CGRectMake(0, 150, kScreenWidth, 150)];
             [self.view addSubview:_MyEmptyView];
+            [tableview.mj_header endRefreshing];
+            [tableview.mj_footer endRefreshing];
+
         }
-        
-        [tableview reloadData];
-        
     } failure:^(NSError *error) {
         
     } withSuperView:self];
@@ -136,7 +250,7 @@
     [carView addGestureRecognizer:tgr];
     
 }
-#pragma mark--点击收藏
+#pragma mark--我的收藏
 - (void)handle{
     MyTeamViewController *vc = [[MyTeamViewController alloc]init];
     [self.navigationController pushViewController:vc animated:YES];
@@ -173,74 +287,75 @@
         
         _flag = 0;
         
+ 
         //自选
 //        NSLog(@"-----%ld",(long)sgc.selectedSegmentIndex);
         
+ 
         [_findTableView removeFromSuperview];//移除套餐
-        
-        _findSelfTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight-64-49-64) style:UITableViewStylePlain];
-        _findSelfTableView.backgroundColor = grayBG;
-        _findSelfTableView.delegate = self;
-        _findSelfTableView.dataSource = self;
-        [self.view addSubview:_findSelfTableView];//添加自选
-        [_findSelfTableView registerNib:[UINib nibWithNibName:@"HCYXSelfCell" bundle:nil] forCellReuseIdentifier:@"firstcell"];
-        [self.view bringSubviewToFront:carView];
-        
-        [self getDataWithCtl:@"productList" withTableView:_findSelfTableView];//自选数据
+        //自选tableView
+        [self createZiXuanTableView];
         
     }else if (sgc.selectedSegmentIndex == 1){
         
         _flag = 1;
         
+ 
         //套餐
 //        NSLog(@"=====%ld",(long)sgc.selectedSegmentIndex);
         
+ 
         [_findSelfTableView removeFromSuperview];//移除自选
         
-        //套餐tableView
-        _findTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight-64-49-64) style:UITableViewStylePlain];
-        _findTableView.backgroundColor = grayBG;
-        _findTableView.delegate = self;
-        _findTableView.dataSource = self;
-        [self.view addSubview:_findTableView];//添加套餐
-        [_findTableView registerNib:[UINib nibWithNibName:@"HCYXCell" bundle:nil] forCellReuseIdentifier:@"secondcell"];
-        [self.view bringSubviewToFront:carView];
-        
-        [self getDataWithCtl:@"productGroupList" withTableView:_findTableView];//套餐数据
+        [self createTanCanTableView];
     }
 }
-
 #pragma mark--创建tableView
 - (void)createFindCarTableView{
     _modelArr = [NSMutableArray array];
     if (_flag == 0) {
         //自选tableView
-        _findSelfTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight-64-49-64) style:UITableViewStylePlain];
-        _findSelfTableView.backgroundColor = grayBG;
-        _findSelfTableView.delegate = self;
-        _findSelfTableView.dataSource = self;
-        _findSelfTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        [self.view addSubview:_findSelfTableView];
-        
-        [_findSelfTableView registerNib:[UINib nibWithNibName:@"HCYXSelfCell" bundle:nil] forCellReuseIdentifier:@"firstcell"];
-        
-        [self getDataWithCtl:@"productList" withTableView:_findSelfTableView];//自选数据
+        [self createZiXuanTableView];
         
     }else if (_flag == 1){
         
         //套餐tableView
-        _findTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight-64-49-64) style:UITableViewStylePlain];
-        _findTableView.backgroundColor = grayBG;
-        _findTableView.delegate = self;
-        _findTableView.dataSource = self;
-        _findTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        [self.view addSubview:_findTableView];
-        
-        [_findTableView registerNib:[UINib nibWithNibName:@"HCYXCell" bundle:nil] forCellReuseIdentifier:@"secondcell"];
-        
-        [self getDataWithCtl:@"productGroupList" withTableView:_findTableView];//套餐数据
+        [self createTanCanTableView];
     }
+}
+//自选tableView
+- (void)createZiXuanTableView{
+    //当前页从零开始
+    currentPage = 0;
     
+    _findSelfTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight-64-49-64) style:UITableViewStylePlain];
+    _findSelfTableView.backgroundColor = grayBG;
+    _findSelfTableView.delegate = self;
+    _findSelfTableView.dataSource = self;
+    _findSelfTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:_findSelfTableView];//添加自选
+    [_findSelfTableView registerNib:[UINib nibWithNibName:@"HCYXSelfCell" bundle:nil] forCellReuseIdentifier:@"firstcell"];
+    [self.view bringSubviewToFront:carView];
+    
+    [self getDataWithCtl:@"productList" withTableView:_findSelfTableView];//自选数据
+    [self addMJRefreshWithTableView:_findSelfTableView];//添加刷新功能
+}
+//套餐tableView
+- (void)createTanCanTableView{
+    //当前页从零开始
+    currentPage = 0;
+    
+    _findTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight-64-49-64) style:UITableViewStylePlain];
+    _findTableView.backgroundColor = grayBG;
+    _findTableView.delegate = self;
+    _findTableView.dataSource = self;
+    _findTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:_findTableView];
+    
+    [_findTableView registerNib:[UINib nibWithNibName:@"HCYXCell" bundle:nil] forCellReuseIdentifier:@"secondcell"];
+    
+    [self getDataWithCtl:@"productGroupList" withTableView:_findTableView];//套餐数据
+    [self addMJRefreshWithTableView:_findTableView];//添加刷新功能
 }
 #pragma mark--tableView代理方法
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{

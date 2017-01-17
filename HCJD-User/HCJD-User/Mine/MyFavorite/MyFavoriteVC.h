@@ -10,4 +10,6 @@
 
 @interface MyFavoriteVC : UIViewController
 
+@property(nonatomic,retain)UITableView *favTableView;
+
 @end

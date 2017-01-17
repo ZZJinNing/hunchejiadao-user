@@ -42,8 +42,6 @@
     //轮播图
     SDCycleScrollView *_cycleScrollView;
     
-    //是否收藏
-    BOOL collection;
     
     //底部View的定金
     UILabel *_dingJinLabel;
@@ -73,20 +71,21 @@
     
     _detailModel = [[DetailModel alloc]init];
     
-    collection = NO;
-    
     _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-124)];
     _scrollView.backgroundColor = grayBG;
     [self.view addSubview:_scrollView];
     
     //头部视图
     [self topView];
+    
+    [self getDataSource];
+    
     //加载webView
     [self loadWebView];
     //尾部视图
     [self belowView];
     
-    [self getDataSource];
+    
     
 }
 
@@ -95,14 +94,16 @@
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:self.productModel._id forKey:@"_id"];
     [_downLoad POST:@"productDetail" param:param success:^(NSDictionary *dic) {
-//        NSLog(@"%@",dic);
+        
         NSDictionary *returnDic = dic[@"return"];
         
         [_detailModel setupValueWith:returnDic];
         
         if ([_detailModel.is_collect integerValue] == 1) {
+            
             _collectionImageView.image = [UIImage imageNamed:@"iconRed"];
         }else{
+            
             _collectionImageView.image = [UIImage imageNamed:@"iconGray"];
         }
         
@@ -205,18 +206,6 @@
 - (void)tapHandlecollection{
     
     [self collectSwitch];
-    
-    if (collection == YES) {
-        //取消收藏
-        _collectionImageView.image = [UIImage imageNamed:@"iconGray"];
-        
-        collection = NO;
-    }else if (collection == NO){
-        //收藏
-        _collectionImageView.image = [UIImage imageNamed:@"iconRed"];
-        
-        collection = YES;
-    }
 }
 //添加或取消收藏
 - (void)collectSwitch{
@@ -225,7 +214,22 @@
     [param setObject:@"product" forKey:@"type"];
     [_downLoad POST:@"collectSwitch" param:param success:^(NSDictionary *dic) {
         
+<<<<<<< HEAD
 //        NSLog(@"%@",dic);
+=======
+        NSString *type = [NSString stringWithFormat:@"%@",dic[@"return"][@"type"]];
+        if ([type isEqualToString:@"add"]) {
+            //收藏
+            _collectionImageView.image = [UIImage imageNamed:@"iconRed"];
+        }else if ([type isEqualToString:@"cancel"]){
+            //取消收藏
+            _collectionImageView.image = [UIImage imageNamed:@"iconGray"];
+        }
+        
+        if (self.changeFavoriteBlock) {
+            self.changeFavoriteBlock();
+        }
+>>>>>>> 0fda384059193aa1e59d2a4cb7b34788af50ae85
         
     } failure:^(NSError *error) {
         
@@ -440,7 +444,10 @@
     [param setObject:@"0" forKey:@"is_sure"];
     
     [_downLoad POST:@"cartAddProduct" param:param success:^(NSDictionary *dic) {
+<<<<<<< HEAD
 //        NSLog(@"%@",dic);
+=======
+>>>>>>> 0fda384059193aa1e59d2a4cb7b34788af50ae85
         
         NSInteger status = [dic[@"status"] integerValue];
         if (status == -2) {

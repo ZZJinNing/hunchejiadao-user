@@ -132,8 +132,11 @@
     [param setObject:_passView.customTF.text forKey:@"password"];
     [_download POST:@"login" param:param success:^(NSDictionary *dic) {
         
+<<<<<<< HEAD
 //        NSLog(@"%@--%@",dic,dic[@"info"]);
         
+=======
+>>>>>>> 0fda384059193aa1e59d2a4cb7b34788af50ae85
         NSString *info = dic[@"info"];
         NSInteger status = [dic[@"status"] integerValue];
         if (status == 1) {
@@ -166,7 +169,6 @@
 #pragma mark--请求获取车队数量
 - (void)getCartNum{
     [[MNDownLoad shareManager] POSTWithoutGitHUD:@"cartNum" param:nil success:^(NSDictionary *dic) {
-        NSLog(@"%@",dic);
         NSInteger status = [dic[@"status"] integerValue];
         if (status == 1) {
             cart_num = [dic[@"return"][@"cart_num"] integerValue];

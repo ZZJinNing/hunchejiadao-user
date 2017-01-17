@@ -10,10 +10,15 @@
 #import "MyTeamTableViewCell.h"
 #import "MyTeamModel.h"
 #import "settlementMoneyViewController.h"
+<<<<<<< HEAD
 #import "EmptyView.h"
+=======
+
+>>>>>>> 0fda384059193aa1e59d2a4cb7b34788af50ae85
 @interface MyTeamViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     UITableView *_tableView;
+    
     NSMutableArray *_dataSource;
     EmptyView *_MyEmptyView;//数据源为空的时候显示
     //选中数组
@@ -32,8 +37,10 @@
     UILabel *_dingjinLabel;
     //全选按钮
     UIButton *_selectedButton;
+    
 } 
 @end
+
 @implementation MyTeamViewController
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -50,9 +57,13 @@
     _dingjinPrice = 0.00;
     _selectAll = NO;
     _selectCellButton = NO;
+<<<<<<< HEAD
      [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getNotification) name:@"MN_getDataSource" object:nil];
+=======
+>>>>>>> 0fda384059193aa1e59d2a4cb7b34788af50ae85
     
     [self createTableView];
+    
     [self getDataSource];
     //去结算界面
     [self settlementView];
@@ -77,11 +88,14 @@
     
 }
 
+<<<<<<< HEAD
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter]removeObserver:@"MN_getDataSource"];
 }
 
 
+=======
+>>>>>>> 0fda384059193aa1e59d2a4cb7b34788af50ae85
 #pragma mark - 创建tableView
 - (void)createTableView{
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-124)];
@@ -179,7 +193,22 @@
         [self getDataSource];
     };
     
+<<<<<<< HEAD
     if ([model.headerCarSelect isEqualToString:@"normal"]) {
+=======
+    //========加号按钮事件=========
+    cell.addBlock = ^{
+        NSInteger count = [weakCell.numberLabel.text integerValue];
+        count++;
+        weakCell.numberLabel.text = [NSString stringWithFormat:@"%ld",count];
+        model.numberStr =  [NSString stringWithFormat:@"%ld",count];
+        [_dataSource replaceObjectAtIndex:indexPath.row withObject:model];
+        if ([_selectedArray containsObject:model]) {
+            [_selectedArray removeObject:model];
+            [_selectedArray addObject:model];
+            [self CalculateTheTotalPrice];
+        }
+>>>>>>> 0fda384059193aa1e59d2a4cb7b34788af50ae85
         
         NSString *product_id = model.product_id;
         

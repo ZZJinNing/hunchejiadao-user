@@ -261,8 +261,6 @@
     
     [_downLoad POST:@"sendSmsCode" param:param success:^(NSDictionary *dic) {
         
-//        NSLog(@"%@",dic);
-        
         NSString *info = dic[@"info"];
         NSInteger status = [dic[@"status"] integerValue];
         if (status == 1) {
@@ -289,8 +287,6 @@
     [param setObject:_passwordTF2.text forKey:@"password_rep"];
     
     [_downLoad POST:@"updatePassword" param:param success:^(NSDictionary *dic) {
-        
-//        NSLog(@"%@",dic);
         
         NSInteger status = [dic[@"status"] integerValue];
         NSString *info = dic[@"info"];

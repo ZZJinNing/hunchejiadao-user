@@ -8,7 +8,7 @@
 //
 
 #import "CityViewController.h"
-#import "cityModel.h"
+#import "CityModel.h"
 @interface CityViewController ()
 {
     //当前城市
@@ -40,7 +40,7 @@
     
 }
 
-//重写返回的方法
+#pragma mark--重写返回的方法
 - (void)back{
     
     if (self.MyBlock != nil) {
@@ -77,7 +77,7 @@
         if ([status integerValue] == 1) {
             NSArray *returnArray = dic[@"return"];
             for (NSDictionary *returnDic in returnArray) {
-                cityModel *model = [[cityModel alloc]init];
+                CityModel *model = [[CityModel alloc]init];
                 model.city = [NSString stringWithFormat:@"%@",returnDic[@"city"]];
                 model.city_id = [NSString stringWithFormat:@"%@",returnDic[@"city_id"]];
                 [_cityArray addObject:model];
@@ -156,7 +156,7 @@
 
 - (void)createCityButtonWithI:(NSInteger)i withJ:(NSInteger)j with:(NSInteger)flag withView:(UIView*)view{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    cityModel *model = _cityArray[flag];
+    CityModel *model = _cityArray[flag];
     [button setTitle:model.city forState:UIControlStateNormal];
     [button addTarget:self action:@selector(selectCity:) forControlEvents:UIControlEventTouchUpInside];
     button.tag = 100+i;
@@ -175,7 +175,7 @@
     [self SwitchTheCityWithFlag:flag];
 }
 - (void)SwitchTheCityWithFlag:(NSInteger)flag{
-    cityModel *model = _cityArray[flag];
+    CityModel *model = _cityArray[flag];
     NSDictionary *param = @{@"city_id":model.city_id};
     [[MNDownLoad shareManager]POST:@"switchCity" param:param success:^(NSDictionary *dic) {
         NSString *info = dic[@"info"];

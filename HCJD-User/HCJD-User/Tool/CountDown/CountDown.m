@@ -141,7 +141,7 @@
 }
 
 -(void)dealloc{
-    NSLog(@"%s dealloc",object_getClassName(self));
+//    NSLog(@"%s dealloc",object_getClassName(self));
     
 }
 @end

@@ -44,7 +44,7 @@
     SDCycleScrollView *_cycleScrollView;//轮播图
     
     //是否收藏
-    BOOL collection;
+    BOOL _collection;
     
     //车队数量
     CarCollectionView *_carView;
@@ -69,10 +69,7 @@
     
     _downLoad = [MNDownLoad shareManager];
     
-    collection = NO;
-    
     _detailGroupModel = [[DetailGroupModel alloc]init];
-    
     
     _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-124)];
     _scrollView.backgroundColor = grayBG;
@@ -95,14 +92,20 @@
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:self.productGroupModel._id forKey:@"_id"];
     [_downLoad POST:@"productGroupDetail" param:param success:^(NSDictionary *dic) {
-//        NSLog(@"%@",dic);
+        
         NSDictionary *returnDic = dic[@"return"];
         
         [_detailGroupModel setupValueWith:returnDic];
         
         if ([_detailGroupModel.is_collect integerValue] == 1) {
+            
+            _collection = YES;
+            
             _collectionImageView.image = [UIImage imageNamed:@"iconRed"];
         }else{
+            
+            _collection = NO;
+            
             _collectionImageView.image = [UIImage imageNamed:@"iconGray"];
         }
     } failure:^(NSError *error) {
@@ -192,27 +195,31 @@
 - (void)tapHandlecollection{
     
     [self collectSwitch];
-    
-    if (collection == YES) {
-        //取消收藏
-        _collectionImageView.image = [UIImage imageNamed:@"iconGray"];
-        
-        collection = NO;
-    }else if (collection == NO){
-        //收藏
-        _collectionImageView.image = [UIImage imageNamed:@"iconRed"];
-        
-        collection = YES;
-    }
 }
 //添加或取消收藏
 - (void)collectSwitch{
+    
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:_productGroupModel._id forKey:@"product_id"];
     [param setObject:@"group" forKey:@"type"];
     [_downLoad POST:@"collectSwitch" param:param success:^(NSDictionary *dic) {
         
+<<<<<<< HEAD
 //        NSLog(@"%@",dic);
+=======
+        NSString *type = [NSString stringWithFormat:@"%@",dic[@"return"][@"type"]];
+        if ([type isEqualToString:@"add"]) {
+            //收藏
+            _collectionImageView.image = [UIImage imageNamed:@"iconRed"];
+        }else if ([type isEqualToString:@"cancel"]){
+            //取消收藏
+            _collectionImageView.image = [UIImage imageNamed:@"iconGray"];
+        }
+        
+        if (self.changeFavoriteBlock) {
+            self.changeFavoriteBlock();
+        }
+>>>>>>> 0fda384059193aa1e59d2a4cb7b34788af50ae85
         
     } failure:^(NSError *error) {
         
@@ -323,8 +330,11 @@
     
     [_downLoad POST:@"cartAddGroup" param:param success:^(NSDictionary *dic) {
         
+<<<<<<< HEAD
 //        NSLog(@"%@",dic);
         
+=======
+>>>>>>> 0fda384059193aa1e59d2a4cb7b34788af50ae85
         NSInteger status = [dic[@"status"] integerValue];
         if (status == -2) {
             [param setObject:@"1" forKey:@"is_sure"];
