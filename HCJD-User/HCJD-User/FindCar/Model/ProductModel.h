@@ -20,4 +20,5 @@
 @property(nonatomic,retain)NSString *price_market;//市场价
 
 - (void)setupValueWith:(NSDictionary *)productDic;
+
 @end

@@ -19,7 +19,7 @@
     UIButton *_headBtn;//头像按钮
     UILabel *_nameLabel;//用户昵称
     
-    
+    //添加手势视图
     GestureView *_accountView;
     GestureView *_nickNameView;
     
@@ -64,13 +64,11 @@
         _accountView.rightLabel.text = _phoneStr;
         _nickNameView.rightLabel.text = _nameStr;
         
-        
-        
     } failure:^(NSError *error) {
         
     } withSuperView:self];
 }
-
+#pragma mark--初始化UI
 - (void)createUI{
     //头像按钮
     _headBtn = [[UIButton alloc]init];
@@ -86,7 +84,6 @@
     .centerXEqualToView(self.view)
     .widthEqualToHeight();
     
-    
     //用户名
     _nameLabel = [[UILabel alloc]init];
     _nameLabel.text = @"婚车驾到";
@@ -99,7 +96,6 @@
     .widthIs(kScreenWidth/4)
     .heightIs(25)
     .centerXEqualToView(self.view);
-    
     
     //账号
     _accountView = [[GestureView alloc]init];
@@ -124,7 +120,6 @@
     UITapGestureRecognizer *nickGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(changeNickName)];
     [_nickNameView addGestureRecognizer:nickGesture];
     
-    
     //密码（添加手势）
     GestureView *passwordView = [[GestureView alloc]init];
     [passwordView createViewWithLeftTitle:@"密码" withRightTitle:@"" withImageName:@"icon_jt"];
@@ -137,7 +132,6 @@
     
     UITapGestureRecognizer *passwordGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(changePassword)];
     [passwordView addGestureRecognizer:passwordGesture];
-    
     
     //退出登录按钮
     UIButton *logout = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -164,7 +158,6 @@
     
     //初始化 UIImagePickerController 对象
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc]init];
-    
     
     //设置代理
     imagePickerController.delegate = self;
@@ -221,6 +214,7 @@
     [param setObject:_photoUrl forKey:@"photo"];
     
     [_downLoad POST:@"updatePhoto" param:param success:^(NSDictionary *dic) {
+
     } failure:^(NSError *error) {
         
     } withSuperView:self];
@@ -250,12 +244,12 @@
         
         //打印上传进度
         CGFloat progress = 100.0 * uploadProgress.completedUnitCount / uploadProgress.totalUnitCount;
-        NSLog(@"%.2lf%%", progress);
+        //NSLog(@"%.2lf%%", progress);
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         //请求成功
-        NSLog(@"请求成功：%@===%@",responseObject,responseObject[@"info"]);
+        //NSLog(@"请求成功：%@===%@",responseObject,responseObject[@"info"]);
         
         NSString *url = responseObject[@"obj"][@"url"];
         
@@ -302,14 +296,10 @@
             
             [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:HCJDName];
             [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:HCJDPhoto];
-            [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:HCJDCart_num];
-            
             LoginVC *vc = [[LoginVC alloc]init];
             vc.view.backgroundColor = grayBG;
             [self presentViewController:vc animated:YES completion:nil];
         }
-        
-        
     } failure:^(NSError *error) {
         
     } withSuperView:self];

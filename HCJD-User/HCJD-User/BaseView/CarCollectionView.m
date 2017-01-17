@@ -30,7 +30,7 @@
     
     //数量
     _numberLable = [[UILabel alloc]init];
-    _numberLable.frame = CGRectMake((imageView.bounds.size.width-7), 5, 15, -10);
+    _numberLable.frame = CGRectMake((imageView.bounds.size.width-7), 5, 17, -10);
     _numberLable.textAlignment = NSTextAlignmentCenter;
     _numberLable.font = [UIFont systemFontOfSize:12];
     _numberLable.adjustsFontSizeToFitWidth = YES;
@@ -42,10 +42,16 @@
     [imageView addSubview:_numberLable];
     
 }
-
-
-
-
+//获取车队数量
+- (void)getAllCarNumber{
+    
+    [[MNDownLoad shareManager]POSTWithOutHUD:@"cartNum" param:nil success:^(NSDictionary *dic) {
+        NSString *number = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
+        _numberLable.text = number;
+    } failure:^(NSError *error) {
+        
+    } withSuperView:nil];
+}
 
 
 

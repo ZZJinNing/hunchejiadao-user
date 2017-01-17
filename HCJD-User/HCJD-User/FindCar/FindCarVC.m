@@ -14,10 +14,9 @@
 #import "CarCollectionView.h"//购物车悬浮按钮
 #import "MyTeamViewController.h"//我的车队
 
-
-#import "ProductModel.h"
-#import "ProductGroupModel.h"
-
+#import "ProductModel.h"//产品Model
+#import "ProductGroupModel.h"//套餐Model
+#import "EmptyView.h"//数据源为空的时候显示的view
 
 typedef NS_ENUM(NSInteger,Refresh_Status) {
     Refresh_normal = 0,//不刷新状态
@@ -25,9 +24,9 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     Refresh_Foot //上拉加载
 };
 
-
 @interface FindCarVC ()<UITableViewDelegate,UITableViewDataSource>{
     
+    EmptyView *_MyEmptyView;
     UITableView *_findSelfTableView;//自选
     
     UITableView *_findTableView;//套餐
@@ -45,7 +44,6 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     NSInteger currentPage;//当前页
     NSInteger maxPages;//总页数
     Refresh_Status _refreshStatus;//刷新状态
-    
 }
 
 @end
@@ -69,7 +67,6 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
         }else{
             _flag = 1;
         }
-        
     }
     //把默认选中的分段控制重置
     [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"car"];
@@ -79,6 +76,8 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     [self createFindCarTableView];
     
     [self carCollection];
+    
+    [carView getAllCarNumber];
 }
  
 - (void)viewDidLoad {
@@ -87,8 +86,6 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     self.navigationItem.title = @"婚车预选";
     
     _downLoad = [MNDownLoad shareManager];
-    
-//    currentPage = 0;//默认初始第一页
     
 }
 
@@ -129,7 +126,6 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     footer.stateLabel.textColor = [UIColor grayColor];
     tableView.mj_footer = footer;
 }
-
 - (void)headRefresh{
     //当前页从零开始
     currentPage = 0;
@@ -175,21 +171,21 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
 
 #pragma mark--数据源
 - (void)getDataWithCtl:(NSString *)ctl withTableView:(UITableView *)tableview{
-    
+
+    [_MyEmptyView removeFromSuperview];
+
     currentPage++;
-    
     //数据模块
-    
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:[NSString stringWithFormat:@"%ld",(long)currentPage]  forKey:@"page"];
     
     [_downLoad POST:ctl param:param success:^(NSDictionary *dic) {
-        
 //        NSLog(@"%@---%@---%@",dic,dic[@"info"],param);
         
         //最大页数
         maxPages = [dic[@"page_pages"] integerValue];
         
+
         NSArray *returnArr = dic[@"return"];
         if (!kArrayIsEmpty(returnArr)) {
             
@@ -217,6 +213,8 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
             }
             [tableview reloadData];
         }else{
+            _MyEmptyView = [[EmptyView alloc]initWithFrame:CGRectMake(0, 150, kScreenWidth, 150)];
+            [self.view addSubview:_MyEmptyView];
             [tableview.mj_header endRefreshing];
             [tableview.mj_footer endRefreshing];
         }
@@ -227,12 +225,11 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
 
 #pragma mark--车队数量
 - (void)carCollection{
-    NSString *cart_num = [[NSUserDefaults standardUserDefaults]objectForKey:HCJDCart_num];
-    carView = [[CarCollectionView alloc]initWithFrame:CGRectMake(kScreenWidth-80, kScreenHeight-150-64, 60, 60) withNumber:[cart_num integerValue]];
+    
+    carView = [[CarCollectionView alloc]initWithFrame:CGRectMake(kScreenWidth-80, kScreenHeight-150-64, 60, 60) withNumber:0];
     carView.layer.cornerRadius = 30;
     carView.layer.masksToBounds = YES;
     [self.view addSubview:carView];
-   
     
     //添加点击事件
     UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handle)];
@@ -245,11 +242,10 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     [self.navigationController pushViewController:vc animated:YES];
     
 }
-
 #pragma mark--创建UISegmentedControl（分段控制）
 - (void)createSgcView{
     segmentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 64)];
-    segmentView.backgroundColor = [UIColor whiteColor];
+    segmentView.backgroundColor = grayBG;
     [self.view addSubview:segmentView];
     
     UISegmentedControl *sgc = [[UISegmentedControl alloc]initWithItems:@[@"自选车",@"套餐"]];
@@ -267,7 +263,7 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     
     [segmentView addSubview:sgc];
 }
-#pragma mark--sgc点击事件
+#pragma mark--SGC点击事件
 - (void)changeIndex:(UISegmentedControl *)sgc{
     
     [_modelArr removeAllObjects];//清空数据
@@ -276,6 +272,8 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
         
         _flag = 0;
         
+        //自选
+ 
         [_findTableView removeFromSuperview];//移除套餐
         //自选tableView
         [self createZiXuanTableView];
@@ -284,6 +282,8 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
         
         _flag = 1;
         
+        //套餐
+ 
         [_findSelfTableView removeFromSuperview];//移除自选
         
         [self createTanCanTableView];
@@ -330,20 +330,20 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     _findTableView.dataSource = self;
     _findTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_findTableView];
+    [self.view bringSubviewToFront:carView];
     
     [_findTableView registerNib:[UINib nibWithNibName:@"HCYXCell" bundle:nil] forCellReuseIdentifier:@"secondcell"];
     
     [self getDataWithCtl:@"productGroupList" withTableView:_findTableView];//套餐数据
     [self addMJRefreshWithTableView:_findTableView];//添加刷新功能
 }
-#pragma mark--tableView代理方法
+#pragma mark--TableView代理方法
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell;
     if (_flag == 0) {
         HCYXSelfCell *cellZiXuan = [tableView dequeueReusableCellWithIdentifier:@"firstcell" forIndexPath:indexPath];
         //重新给Cell赋值
         [cellZiXuan setupValueWithModel:_modelArr[indexPath.row]];
-        
         cell = cellZiXuan;
     }else if (_flag == 1){
         HCYXCell *cellTaoCan = [tableView dequeueReusableCellWithIdentifier:@"secondcell" forIndexPath:indexPath];
@@ -354,7 +354,6 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return _modelArr.count;
 }
@@ -367,10 +366,8 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     }else if(_flag == 1){
         rowHeight = 92+220*kScaleWidth;
     }
-    
     return rowHeight;
 }
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (_flag == 0) {
 #pragma mark--进入自选详情页
@@ -395,20 +392,9 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     }
 }
 
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

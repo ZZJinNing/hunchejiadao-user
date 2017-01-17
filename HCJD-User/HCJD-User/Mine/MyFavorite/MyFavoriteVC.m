@@ -141,7 +141,6 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:[NSString stringWithFormat:@"%ld",(long)currentPage] forKey:@"page"];
     [_downLoad POST:@"collectList" param:param success:^(NSDictionary *dic) {
-        
         //最大页数
         maxPages = [dic[@"page_pages"] integerValue];
         
@@ -179,7 +178,6 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:@"1" forKey:@"page"];
     [_downLoad POSTWithoutGitHUD:@"collectList" param:param success:^(NSDictionary *dic) {
-        
         NSArray *returnArr = dic[@"return"];
         if (!kArrayIsEmpty(returnArr)) {
             for (NSDictionary *favDic in dic[@"return"]) {

@@ -10,15 +10,6 @@
 
 @implementation GestureView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-
-
 - (void)createViewWithLeftTitle:(NSString *)lefttitle withRightTitle:(NSString *)righttitle withImageName:(NSString *)imageName{
     UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 40)];
     [self addSubview:view];
@@ -66,7 +57,6 @@
     .bottomSpaceToView(view,0)
     .heightIs(1)
     .widthIs(kScreenWidth);
-    
     
 }
 

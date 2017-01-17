@@ -52,7 +52,7 @@
     
     [_countDown countDownWithStratDate:strtDate finishDate:finishDate completeBlock:^(NSInteger day, NSInteger hour, NSInteger minute, NSInteger second) {
         
-        //        NSLog(@"用两个NSDate对象进行倒计时，second = %li",(long)second);
+        //(@"用两个NSDate对象进行倒计时);
         
         NSInteger totoalSecond =day*24*60*60+hour*60*60 + minute*60+second;
         if (totoalSecond==0) {

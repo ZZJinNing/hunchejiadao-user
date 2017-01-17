@@ -47,7 +47,7 @@
     
     [_countDown countDownWithStratDate:strtDate finishDate:finishDate completeBlock:^(NSInteger day, NSInteger hour, NSInteger minute, NSInteger second) {
         
-        //        NSLog(@"用两个NSDate对象进行倒计时，second = %li",(long)second);
+        //(用两个NSDate对象进行倒计时);
         
         NSInteger totoalSecond =day*24*60*60+hour*60*60 + minute*60+second;
         if (totoalSecond==0) {
@@ -63,8 +63,7 @@
     }];
 }
 
-
-
+#pragma mark--初始化UI
 - (void)createUI{
     
     NSInteger f = 18;//字体大小
@@ -77,7 +76,6 @@
     .centerXEqualToView(self.view)
     .heightIs(70)
     .widthIs(200);
-    
     
 #pragma mark--账号部分
     UILabel *label1 = [[UILabel alloc]init];
@@ -111,8 +109,6 @@
     .leftSpaceToView(self.view,30)
     .rightSpaceToView(self.view,30)
     .topSpaceToView(label1,5);
-    
-    
     
 #pragma mark--验证码部分
     //验证码输入框
@@ -151,7 +147,6 @@
     .leftSpaceToView(self.view,30)
     .rightSpaceToView(self.view,30)
     .topSpaceToView(_yanzhengTF,5);
-    
     
 #pragma mark--新密码和确认密码部分
     //新密码
@@ -193,8 +188,6 @@
     .leftSpaceToView(self.view,30)
     .rightSpaceToView(self.view,30)
     .topSpaceToView(_passwordTF1,5);
-    
-    
     
     //确认密码
     UILabel *label3 = [[UILabel alloc]init];
@@ -312,15 +305,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

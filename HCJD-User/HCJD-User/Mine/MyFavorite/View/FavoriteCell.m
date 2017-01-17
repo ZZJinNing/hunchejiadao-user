@@ -12,25 +12,26 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    
+    //左侧头车和跟车两个固定Label
     self.leftLabel.layer.cornerRadius = 3;
     self.leftLabel.layer.borderColor = [[UIColor redColor] CGColor];
     self.leftLabel.layer.borderWidth = 1;
     self.leftLabel.layer.masksToBounds = YES;
     self.leftLabel.textAlignment = NSTextAlignmentCenter;
     
+    //取消收藏
     self.noFavoriteBtn.layer.cornerRadius = 3;
     self.noFavoriteBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
     self.noFavoriteBtn.layer.borderWidth = 1;
-    //取消收藏
     [self.noFavoriteBtn addTarget:self action:@selector(noFavoriteBtnClick) forControlEvents:UIControlEventTouchUpInside];
     
-    
+    //左侧图片
     self.leftImageView.layer.cornerRadius = 3;
     self.leftImageView.layer.masksToBounds = YES;
     
+    //Cell选中状态
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
 }
 
 - (void)setupProductValueWith:(ProductModel *)productModel{
@@ -63,9 +64,8 @@
     [self.leftImageView sd_setImageWithURL:[NSURL URLWithString:groupModel.image] placeholderImage:[UIImage imageNamed:@"image"]];
     //头车
     self.headCarLabel.text = [NSString stringWithFormat:@"%@",groupModel.header_car];
-    
-    
 }
+
 //取消收藏
 - (void)noFavoriteBtnClick{
     if (self.cancelBlock) {

@@ -17,7 +17,6 @@
 #import "homeTableViewCell.h"
 #import "homeTaoCanTableViewCell.h"
 
-
 typedef NS_ENUM(NSInteger,Refresh_Status) {
     Refresh_normal = 0,//不刷新状态
     Refresh_Head,//下拉刷新
@@ -89,6 +88,10 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+    [_carView getAllCarNumber];
+    
+    
 }
 
 #pragma mark--设置刷新
@@ -134,8 +137,7 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
     if ([phoneStr isEqualToString:@""]&&[password isEqualToString:@""]) {
         cart_num = 0;
         _carView.numberLable.text = [NSString stringWithFormat:@"%ld",(long)cart_num];
-        //保存cart_num
-        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%ld",(long)cart_num] forKey:HCJDCart_num];
+    
     }else{
         [[MNDownLoad shareManager] POSTWithoutGitHUD:@"cartNum" param:nil success:^(NSDictionary *dic) {
             
@@ -143,8 +145,7 @@ typedef NS_ENUM(NSInteger,Refresh_Status) {
             if (status == 1) {
                 cart_num = [dic[@"return"][@"cart_num"] integerValue];
                 _carView.numberLable.text = [NSString stringWithFormat:@"%ld",(long)cart_num];
-                //保存cart_num
-                [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%ld",(long)cart_num] forKey:HCJDCart_num];
+            
             }
         } failure:^(NSError *error) {
             

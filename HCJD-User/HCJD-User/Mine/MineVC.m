@@ -123,8 +123,6 @@
     
     return mineview;
 }
-
-
 #pragma mark--修改资料
 - (void)changeMessage{
     
@@ -142,7 +140,6 @@
 }
 #pragma mark--成为车主
 - (void)carOwnerViewClick{
-    NSLog(@"成为车主");
     CarOwnerVC *vc = [[CarOwnerVC alloc]init];
     vc.view.backgroundColor = grayBG;
     [self.navigationController pushViewController:vc animated:YES];
@@ -150,14 +147,12 @@
 }
 #pragma mark--我的车队
 - (void)myCarsViewClick{
-    NSLog(@"我的车队");
     MyTeamViewController *vc = [[MyTeamViewController alloc]init];
     vc.view.backgroundColor = grayBG;
     [self.navigationController pushViewController:vc animated:YES];
 }
 #pragma mark--我的收藏
 - (void)myFavoriteViewClick{
-    NSLog(@"我的收藏");
     MyFavoriteVC *vc = [[MyFavoriteVC alloc]init];
     vc.view.backgroundColor = grayBG;
     [self.navigationController pushViewController:vc animated:YES];
@@ -165,7 +160,6 @@
 }
 #pragma mark--我的订单
 - (void)myOrderViewClick{
-    NSLog(@"我的订单");
     MyOrderVC *vc = [[MyOrderVC alloc]init];
     vc.view.backgroundColor = grayBG;
     [self.navigationController pushViewController:vc animated:YES];
@@ -175,15 +169,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

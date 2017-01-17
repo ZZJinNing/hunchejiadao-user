@@ -114,8 +114,7 @@
 //头像图片url
 #define HCJDPhoto @"HCJDPhoto"
 
-//车队数量
-#define HCJDCart_num @"HCJDCart_num"
+
 
 
 

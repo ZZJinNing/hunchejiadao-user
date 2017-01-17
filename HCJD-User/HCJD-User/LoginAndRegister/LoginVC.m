@@ -132,6 +132,7 @@
     [param setObject:_passView.customTF.text forKey:@"password"];
     [_download POST:@"login" param:param success:^(NSDictionary *dic) {
         
+        
         NSString *info = dic[@"info"];
         NSInteger status = [dic[@"status"] integerValue];
         if (status == 1) {
@@ -167,8 +168,7 @@
         NSInteger status = [dic[@"status"] integerValue];
         if (status == 1) {
             cart_num = [dic[@"return"][@"cart_num"] integerValue];
-            //保存cart_num
-            [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%ld",(long)cart_num] forKey:HCJDCart_num];
+           
             
             [self presentViewController:[[TarbarViewController alloc]init] animated:YES completion:nil];
         }

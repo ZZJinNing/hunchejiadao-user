@@ -29,7 +29,6 @@
     UILabel *_numberLabel;
     NSInteger _number;
     
-    
     //头部视图
     UIView *_topview;
     //详情视图
@@ -39,9 +38,11 @@
     
     MNDownLoad *_downLoad;
     
+    //套餐详情Model
     DetailGroupModel *_detailGroupModel;
     
-    SDCycleScrollView *_cycleScrollView;//轮播图
+    //轮播图
+    SDCycleScrollView *_cycleScrollView;
     
     //是否收藏
     BOOL _collection;
@@ -84,7 +85,6 @@
     //底部视图
     [self bottomView];
     
-    
     [self getDataSource];
 }
 #pragma mark - 数据源
@@ -112,7 +112,6 @@
         
     } withSuperView:self];
 }
-
 
 #pragma mark - 头部视图
 - (void)topImageView{
@@ -203,7 +202,7 @@
     [param setObject:_productGroupModel._id forKey:@"product_id"];
     [param setObject:@"group" forKey:@"type"];
     [_downLoad POST:@"collectSwitch" param:param success:^(NSDictionary *dic) {
-        
+
         NSString *type = [NSString stringWithFormat:@"%@",dic[@"return"][@"type"]];
         if ([type isEqualToString:@"add"]) {
             //收藏
@@ -263,16 +262,12 @@
     _bottomView.backgroundColor = grayBG;
     [self.view addSubview:_bottomView];
     
-    
-    NSString *cart_numStr = [[NSUserDefaults standardUserDefaults]objectForKey:HCJDCart_num];
-    cart_num = [cart_numStr integerValue];
-    _carView = [[CarCollectionView alloc]initWithFrame:CGRectMake(0, 0, 80, 60) withNumber:cart_num];
+    _carView = [[CarCollectionView alloc]initWithFrame:CGRectMake(0, 0, 80, 60) withNumber:0];
     [_bottomView addSubview:_carView];
     //添加点击事件
     UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handle)];
     [_carView addGestureRecognizer:tgr];
- 
-   
+    
     //===========加入车队按钮==================
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = CGRectMake(_bottomView.bounds.size.width - 100, 0, 100, 60);
@@ -280,7 +275,6 @@
     [button addTarget:self action:@selector(joinTheTeam) forControlEvents:UIControlEventTouchUpInside];
     button.backgroundColor = kRGBA(249, 30, 51, 1);
     [_bottomView addSubview:button];
-    
     
     //============定金  总价======================
     UILabel *dingJinLabel = [[UILabel alloc]init];
@@ -300,8 +294,6 @@
     [string addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:NSMakeRange(4, str.length - 4)];
     dingJinLabel.attributedText = string;
     
-    
-    
     UILabel *allLabel = [[UILabel alloc]init];
     allLabel.font = [UIFont systemFontOfSize:15];
     allLabel.textColor = wordColorDark;
@@ -314,8 +306,6 @@
     .widthIs(200)
     .heightIs(30);
     
-    
-    
 }
 #pragma mark - 加入车队
 - (void)joinTheTeam{
@@ -326,6 +316,8 @@
     
     [_downLoad POST:@"cartAddGroup" param:param success:^(NSDictionary *dic) {
         
+        NSLog(@"%@",dic);
+        
         NSInteger status = [dic[@"status"] integerValue];
         if (status == -2) {
             [param setObject:@"1" forKey:@"is_sure"];
@@ -334,12 +326,11 @@
             UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"       取消" style:UIAlertActionStyleCancel handler:nil];
             UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [_downLoad POST:@"cartAddGroup" param:param success:^(NSDictionary *dic) {
+                    
                     //修改车队数量
                     NSString *cart_numStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
                     NSInteger cartTotal = [cart_numStr integerValue];
                     _carView.numberLable.text = [NSString stringWithFormat:@"%ld",(long)cartTotal];
-                    //保存车队数量
-                    [[NSUserDefaults standardUserDefaults]setObject:cart_numStr forKey:HCJDCart_num];
                     
                     //修改成功提示
                     UIAlertView *OK = [[UIAlertView alloc]initWithTitle:@"修改成功" message:@"" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
@@ -358,28 +349,22 @@
             NSString *cart_numStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
             NSInteger cartTotal = [cart_numStr integerValue];
             _carView.numberLable.text = [NSString stringWithFormat:@"%ld",(long)cartTotal];
-            //保存车队数量
-            [[NSUserDefaults standardUserDefaults]setObject:cart_numStr forKey:HCJDCart_num];
+           
         }else if (status == 0){
             NSString *info = [NSString stringWithFormat:@"%@",dic[@"info"]];
             //加入失败
             UIAlertView *infoAlert = [[UIAlertView alloc]initWithTitle:nil message:info delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
             [infoAlert show];
         }
-
-        
     } failure:^(NSError *error) {
         
     } withSuperView:self];
-    
-    
 }
 #pragma mark - 我的车队
 - (void)handle{
     MyTeamViewController *vc = [[MyTeamViewController alloc]init];
     vc.view.backgroundColor = [UIColor whiteColor];
     [self.navigationController pushViewController:vc animated:YES];
-   
 }
 
 @end

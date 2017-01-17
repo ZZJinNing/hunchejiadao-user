@@ -168,7 +168,7 @@
     
 }
 
-//计算label高度
+# pragma mark -- 计算label高度
 - (float)getHeightWithString:(NSString *)string andWidth:(float)width andLabelTextSize:(float)Mysize{
     
     UILabel *label = [[UILabel alloc]init];
@@ -190,7 +190,6 @@
     return height;
 }
 
-
 # pragma mark -- 查看线路
 - (void)lookRoadMap{
     
@@ -203,15 +202,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

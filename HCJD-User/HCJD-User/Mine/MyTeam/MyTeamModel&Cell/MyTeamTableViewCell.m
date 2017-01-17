@@ -8,11 +8,10 @@
 
 #import "MyTeamTableViewCell.h"
 
-
 @interface MyTeamTableViewCell()
 {
-    
-    NSString *_MySelected;
+    MyTeamModel *_model;
+    UIViewController *_superController;
 }
 @end
 
@@ -20,20 +19,18 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
-    
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.backgroundColor = grayBG;
-        [self layoutUI];
     }
     return self;
 }
@@ -63,7 +60,7 @@
 
     //==============头像=================
     _headerImageView = [[UIImageView alloc]init];
-    _headerImageView.image = [UIImage imageNamed:@"image"];
+    [_headerImageView sd_setImageWithURL:[NSURL URLWithString:_model.headerImageStr] placeholderImage:[UIImage imageNamed:@"placeHold"]];
     _headerImageView.layer.cornerRadius = 5;
     _headerImageView.layer.masksToBounds = YES;
     [view addSubview:_headerImageView];
@@ -75,7 +72,7 @@
 
     //=============车的类型================
     _carTypeLabel = [[UILabel alloc]init];
-    _carTypeLabel.text = @"奥迪A6L白色";
+    _carTypeLabel.text = _model.carTypeStr;
     _carTypeLabel.adjustsFontSizeToFitWidth = YES;
     _carTypeLabel.textColor = wordColorDark;
     _carTypeLabel.font = [UIFont systemFontOfSize:15];
@@ -90,7 +87,7 @@
     _moneyLabel = [[UILabel alloc]init];
     _moneyLabel.textColor = kRGBA(249, 30, 51, 1);
     _moneyLabel.adjustsFontSizeToFitWidth = YES;
-    _moneyLabel.text = @"定金:¥ 400";
+    _moneyLabel.text = [NSString stringWithFormat:@"定金:%@元",_model.moneyStr];
     [view addSubview:_moneyLabel];
     _moneyLabel.sd_layout
     .leftSpaceToView(_headerImageView,8)
@@ -99,13 +96,13 @@
     .heightIs(20);
     
     //➖
-    UIButton *cutButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cutButton.backgroundColor = kRGBA(180, 180, 180, 0.2);
-    [cutButton setImage:[UIImage imageNamed:@"cutnor"] forState:UIControlStateNormal];
-    [cutButton setImage:[UIImage imageNamed:@"cutred"] forState:UIControlStateHighlighted];
-    [cutButton addTarget:self action:@selector(cutBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:cutButton];
-    cutButton.sd_layout
+    _cutButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _cutButton.backgroundColor = kRGBA(180, 180, 180, 0.2);
+    [_cutButton setImage:[UIImage imageNamed:@"cutnor"] forState:UIControlStateNormal];
+    [_cutButton setImage:[UIImage imageNamed:@"cutred"] forState:UIControlStateHighlighted];
+    [_cutButton addTarget:self action:@selector(cutBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:_cutButton];
+    _cutButton.sd_layout
     .leftSpaceToView(_headerImageView,8)
     .topSpaceToView(_moneyLabel,10)
     .widthIs(30)
@@ -113,41 +110,48 @@
     
     //数量label
     _numberLabel = [[UILabel alloc]init];
+    _numberLabel.text = _model.numberStr;
     _numberLabel.textColor = [UIColor lightGrayColor];
     _numberLabel.textAlignment = NSTextAlignmentCenter;
-    _numberLabel.text = [NSString stringWithFormat:@"%d",1];
+    _numberLabel.adjustsFontSizeToFitWidth = YES;
     [view addSubview:_numberLabel];
     _numberLabel.sd_layout
-    .leftSpaceToView(cutButton,5)
-    .centerYEqualToView(cutButton)
+    .leftSpaceToView(_cutButton,5)
+    .centerYEqualToView(_cutButton)
     .widthIs(20)
     .heightIs(20);
     
     //➕
-    UIButton *addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [addBtn setImage:[UIImage imageNamed:@"addnor"] forState:UIControlStateNormal];
-    addBtn.backgroundColor = kRGBA(180, 180, 180, 0.2);
-    [addBtn setImage:[UIImage imageNamed:@"addred"] forState:UIControlStateHighlighted];
-    [addBtn addTarget:self action:@selector(addBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:addBtn];
-    addBtn.sd_layout
+    _addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_addBtn setImage:[UIImage imageNamed:@"addnor"] forState:UIControlStateNormal];
+    _addBtn.backgroundColor = kRGBA(180, 180, 180, 0.2);
+    [_addBtn setImage:[UIImage imageNamed:@"addred"] forState:UIControlStateHighlighted];
+    [_addBtn addTarget:self action:@selector(addBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:_addBtn];
+    _addBtn.sd_layout
     .leftSpaceToView(_numberLabel,5)
     .topSpaceToView(_moneyLabel,10)
     .widthIs(30)
     .heightIs(30);
     
+    
+    
+    
     //是否选作头车
     _carImageView = [[UIImageView alloc]init];
-    _carImageView.image = [UIImage imageNamed:@"icon_bg_nor"];
     [view addSubview:_carImageView];
     _carImageView.sd_layout
     .rightSpaceToView(view,10)
     .topSpaceToView(view,10)
     .widthIs(80)
     .heightIs(25);
+    if ([_model.headerCarSelect isEqualToString:@"normal"]) {
+        _carImageView.image = [UIImage imageNamed:@"icon_bg_nor"];
+    }else if ([_model.headerCarSelect isEqualToString:@"select"]){
+        _carImageView.image = [UIImage imageNamed:@"icon_bg_red"];
+    }
     
     UIButton *headerCarButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _MySelected = @"normal";
     [headerCarButton setTitle:@"用作头车" forState:UIControlStateNormal];
     [headerCarButton setTitleColor:wordColorDark forState:UIControlStateNormal];
     headerCarButton.titleLabel.font = [UIFont systemFontOfSize:13];
@@ -182,6 +186,7 @@
 #pragma mark--点击减号按钮事件
 - (void)cutBtnClick{
     if (self.cutBlock) {
+    
         self.cutBlock();
     }
 }
@@ -194,20 +199,21 @@
 
 #pragma mark--是否用作头车
 - (void)headerCarSelected{
-    if ([_MySelected isEqualToString:@"normal"]) {
-        _MySelected = @"select";
-               
-    }else if ([_MySelected isEqualToString:@"select"]){
-        _MySelected = @"normal";
-        
+    //操作类型（add 设置头车、cancel 取消头车
+    NSString *type;
+    if ([_model.headerCarSelect isEqualToString:@"normal"]) {
+        type = @"add";
+    }else if ([_model.headerCarSelect isEqualToString:@"select"]){
+        type = @"cancel";
     }
     
-    if (self.selectHeaderCarBlock) {
-        self.selectHeaderCarBlock(_MySelected);
-    }
+    
+    NSString *carID = _model.carID;
 
+    [self getHeaderCarWithID:carID WithType:type];
 }
 #pragma mark--删除按钮
+
 - (void)MYDeleteButton{
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"您确定要删除数据吗" preferredStyle:UIAlertControllerStyleAlert];
     
@@ -216,24 +222,106 @@
     }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-       
+            [self delegeOrder];
     }]];
     
-    [self.superController presentViewController:alert animated:YES completion:nil];
+    [_superController presentViewController:alert animated:YES completion:nil];
 
 }
 
 
 #pragma mark - 数据
-- (void)reloadDataWith:(MyTeamModel *)model{
+-(void)reloadDataWith:(MyTeamModel*)model WithSuperController:(UIViewController*)superController{
     self.selectedButton.selected = model.isSelect;
-    if ([model.hesderCarSelect isEqualToString:@"normal"]) {
-        _carImageView.image = [UIImage imageNamed:@"icon_bg_nor"];
-    }else if ([model.hesderCarSelect isEqualToString:@"select"]){
-        _carImageView.image = [UIImage imageNamed:@"icon_bg_red"];
+    
+    if ([model.headerCarSelect isEqualToString:@"normal"]) {
+        _addBtn.userInteractionEnabled = YES;
+        _cutButton.userInteractionEnabled = YES;
+    }else if ([model.headerCarSelect isEqualToString:@"select"]){
+        _addBtn.userInteractionEnabled = NO;
+        _cutButton.userInteractionEnabled = NO;
     }
-  
+    _model = model;
+    _superController = superController;
+    [self layoutUI];
 }
+
+#pragma mark - 用着头车的数据
+- (void)getHeaderCarWithID:(NSString*)carID WithType:(NSString*)type{
+    NSDictionary *param = @{@"_id":carID,@"_type":type,@"is_sure":@"0"};
+    [[MNDownLoad shareManager]POSTWithoutGitHUD:@"cartHeader" param:param success:^(NSDictionary *dic) {
+        NSString *status = [NSString stringWithFormat:@"%@",dic[@"status"]];
+        if ([status isEqualToString:@"-2"]) {
+            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:dic[@"info"] preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                NSDictionary *para = @{@"_id":carID,@"_type":type,@"is_sure":@"1"};
+                [[MNDownLoad shareManager]POSTWithoutGitHUD:@"cartHeader" param:para success:^(NSDictionary *dic) {
+                    NSString *info = dic[@"info"];
+                    NSString *status = [NSString stringWithFormat:@"%@",dic[@"status"]];
+                    if ([status isEqualToString:@"1"]) {
+                       [MBProgressHUD showSuccess:@"操作成功" toView:_superController.view];
+                        [[NSNotificationCenter defaultCenter]postNotificationName:@"MN_getDataSource" object:self];
+                    }else{
+                        [MBProgressHUD showSuccess:info toView:self];
+                    }
+                    
+                   
+                } failure:^(NSError *error) {
+                  
+                } withSuperView:nil];
+            }]];
+            
+            [_superController presentViewController:alert animated:YES completion:nil];
+            
+            
+        }else{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:dic[@"info"] preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            }]];
+            [_superController presentViewController:alert animated:YES completion:nil];
+        }
+        
+    } failure:^(NSError *error) {
+        
+    } withSuperView:nil];
+    
+}
+
+
+#pragma mark - 删除数据
+- (void)delegeOrder{
+    NSString *orderID = _model.carID;
+    NSDictionary *param = @{@"_id":orderID};
+    [[MNDownLoad shareManager]POSTWithoutGitHUD:@"cartDelete" param:param success:^(NSDictionary *dic) {
+
+        NSString *info = dic[@"info"];
+        NSString *status = [NSString stringWithFormat:@"%@",dic[@"status"]];
+        if ([status integerValue] == 1) {
+            if (_delegeBlock) {
+                self.delegeBlock();
+            }
+        }else{
+            [MBProgressHUD showSuccess:info toView:self];
+        }
+     
+    } failure:^(NSError *error) {
+        
+    } withSuperView:_superController];
+    
+    
+    
+}
+
+
+
 
 
 

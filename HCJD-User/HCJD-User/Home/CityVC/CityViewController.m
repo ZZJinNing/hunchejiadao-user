@@ -53,7 +53,6 @@
     self.MyBlock = block;
 }
 
-
 #pragma mark--当前城市
 - (void)currentCity{
     UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 10, kScreenWidth, 50)];
@@ -88,9 +87,6 @@
         }else{
             [MBProgressHUD showSuccess:info toView:self.view];
         }
-        
-        
-        
         
     } failure:^(NSError *error) {
         
@@ -148,7 +144,6 @@
             [self createCityButtonWithI:k withJ:num with:flag withView:view];
             flag++;
         }
-        
         
     }
 

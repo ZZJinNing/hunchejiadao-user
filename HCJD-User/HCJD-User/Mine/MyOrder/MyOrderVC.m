@@ -50,11 +50,9 @@
         
         NSLog(@"%@",dic);
         
-        
     } failure:^(NSError *error) {
         
     } withSuperView:self];
-    
 }
 #pragma mark--分段控制器
 - (void)createSgcView{
@@ -72,7 +70,6 @@
     //添加点击事件
     [_sgc addTarget:self action:@selector(changeIndex:) forControlEvents:UIControlEventValueChanged];
     _sgc.backgroundColor = [UIColor whiteColor];
-    
     [self.view addSubview:_sgc];
     
     
@@ -99,7 +96,6 @@
     .bottomSpaceToView(self.view,0)
     .leftSpaceToView(self.view,0);
     
-    
     [_orderTableView registerNib:[UINib nibWithNibName:@"OrderCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     
     if (_orderTableView == 0) {
@@ -107,8 +103,6 @@
         logo.frame = CGRectMake(kScreenWidth/3, kScreenHeight/6, kScreenWidth/3, kScreenWidth*2/9);
         [_orderTableView addSubview:logo];
     }
-    
-    
 }
 #pragma mark--分段显示订单的不同状态
 - (void)changeIndex:(UISegmentedControl *)sgc{
@@ -130,8 +124,6 @@
     }else{//已完成
         [self getDataSourceWithType:@"is_finish"];
     }
-    
-    
     
 }
 #pragma mark--TableView代理方法
@@ -155,14 +147,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

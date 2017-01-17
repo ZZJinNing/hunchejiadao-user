@@ -11,6 +11,12 @@
 @interface CarCollectionView : UIView
 
 - (instancetype)initWithFrame:(CGRect)frame withNumber:(NSInteger)number;
+
+/**
+ 获取车的数量
+ */
+- (void)getAllCarNumber;
+
 @property (nonatomic,retain)UILabel *numberLable;
 
 @end

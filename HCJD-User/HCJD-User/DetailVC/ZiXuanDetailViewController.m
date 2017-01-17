@@ -37,6 +37,7 @@
     
     MNDownLoad *_downLoad;
     
+    //产品详情Model
     DetailModel *_detailModel;
     
     //轮播图
@@ -62,6 +63,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [_carView getAllCarNumber];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -84,9 +86,6 @@
     [self loadWebView];
     //尾部视图
     [self belowView];
-    
-    
-    
 }
 
 #pragma mark - 数据源
@@ -213,7 +212,7 @@
     [param setObject:_productModel._id forKey:@"product_id"];
     [param setObject:@"product" forKey:@"type"];
     [_downLoad POST:@"collectSwitch" param:param success:^(NSDictionary *dic) {
-        
+
         NSString *type = [NSString stringWithFormat:@"%@",dic[@"return"][@"type"]];
         if ([type isEqualToString:@"add"]) {
             //收藏
@@ -380,11 +379,7 @@
     bgView.backgroundColor = grayBG;
     [self.view addSubview:bgView];
     
-    NSString *cartNum = [[NSUserDefaults standardUserDefaults]objectForKey:HCJDCart_num];
-    
-    cart_num = [cartNum integerValue];
-    
-    _carView = [[CarCollectionView alloc]initWithFrame:CGRectMake(0, 0, 80, 60) withNumber:cart_num];
+    _carView = [[CarCollectionView alloc]initWithFrame:CGRectMake(0, 0, 80, 60) withNumber:0];
     [bgView addSubview:_carView];
     //添加点击事件
     UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handle)];
@@ -455,9 +450,6 @@
                     NSString *cart_numStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
                     NSInteger cartTotal = [cart_numStr integerValue];
                     _carView.numberLable.text = [NSString stringWithFormat:@"%ld",(long)cartTotal];
-                    //保存车队数量
-                    [[NSUserDefaults standardUserDefaults]setObject:cart_numStr forKey:HCJDCart_num];
-                    
                     //修改成功提示
                     UIAlertView *OKAlert = [[UIAlertView alloc]initWithTitle:@"修改成功" message:@"" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
                     [OKAlert show];
@@ -475,8 +467,7 @@
             NSString *cart_numStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
             NSInteger cartTotal = [cart_numStr integerValue];
             _carView.numberLable.text = [NSString stringWithFormat:@"%ld",(long)cartTotal];
-            //保存车队数量
-            [[NSUserDefaults standardUserDefaults]setObject:cart_numStr forKey:HCJDCart_num];
+            
             
         }else if (status == 0){
             NSString *info = [NSString stringWithFormat:@"%@",dic[@"info"]];

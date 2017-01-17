@@ -22,7 +22,6 @@
     self.headerLabel.layer.masksToBounds = YES;
     self.headerLabel.layer.cornerRadius = 1;
     
-    
     self.genLabel.layer.borderWidth = 1.0;
     self.genLabel.layer.borderColor = [kRGB(249, 30, 51) CGColor];
     self.genLabel.layer.masksToBounds = YES;
@@ -44,7 +43,6 @@
     [self.carImageView sd_setImageWithURL:[NSURL URLWithString:groupModel.image] placeholderImage:[UIImage imageNamed:@""]];
     //跟车(跟车名和数量)
     self.genCarLabel.text = [NSString stringWithFormat:@"%@X%@辆",groupModel.follow_name,groupModel.f_product_num];
-    
     
 }
 

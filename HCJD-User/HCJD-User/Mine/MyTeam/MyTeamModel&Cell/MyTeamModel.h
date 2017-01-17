@@ -20,12 +20,20 @@
 @property (nonatomic,strong)NSString *allMoneyStr;
 //数量
 @property (nonatomic,strong)NSString *numberStr;
+//产品ID
+@property (nonatomic,strong)NSString *carID;
+
+@property (nonatomic,copy)NSString *product_id;
 
 //是否选作按钮
 @property (nonatomic)BOOL isSelect;
 //是否选中为头车
-@property (nonatomic,strong)NSString *hesderCarSelect;
+@property (nonatomic,strong)NSString *headerCarSelect;
 
 
+
+
+//解析数据
+- (void)parsingModelWithDictionary:(NSDictionary*)dictionary;
 
 @end
