@@ -13,8 +13,13 @@
 #import "CarOwnerVC.h"
 #import "MyTeamViewController.h"
 #import "LoginVC.h"
+#import "UIButton+WebCache.h"
 
-@interface MineVC ()
+@interface MineVC (){
+    MNDownLoad *_downLoad;
+    UIButton *_headBtn;
+    NSString *_photoUrl;
+}
 
 @end
 
@@ -28,9 +33,29 @@
     // Do any additional setup after loading the view.
     self.navigationItem.title = @"个人中心";
     
+    _downLoad = [MNDownLoad shareManager];
+    
     [self createUI];
+    
+    [self getMessage];
 }
 
+#pragma mark--获取个人资料
+- (void)getMessage{
+    
+    [_downLoad POSTWithOutHUD:@"userInfo" param:nil success:^(NSDictionary *dic) {
+        
+        _photoUrl = [NSString stringWithFormat:@"%@",dic[@"return"][@"photo"]];
+        
+        [_headBtn sd_setImageWithURL:[NSURL URLWithString:_photoUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"image"]];
+        
+    } failure:^(NSError *error) {
+        
+    } withSuperView:self];
+}
+
+
+#pragma mark--初始化UI
 - (void)createUI{
     
     UIImageView *bgImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"bg"]];
@@ -39,14 +64,14 @@
     
     
     //头像按钮
-    UIButton *headBtn = [[UIButton alloc]init];
-    [headBtn setTitle:@"头像" forState:UIControlStateNormal];
-    [headBtn setImage:[UIImage imageNamed:@"image"] forState:UIControlStateNormal];
-    headBtn.layer.cornerRadius = kScreenWidth/8;
-    headBtn.layer.masksToBounds = YES;
-    [headBtn addTarget:self action:@selector(changeMessage) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:headBtn];
-    headBtn.sd_layout
+    _headBtn = [[UIButton alloc]init];
+    [_headBtn setTitle:@"头像" forState:UIControlStateNormal];
+    [_headBtn setImage:[UIImage imageNamed:@"image"] forState:UIControlStateNormal];
+    _headBtn.layer.cornerRadius = kScreenWidth/8;
+    _headBtn.layer.masksToBounds = YES;
+    [_headBtn addTarget:self action:@selector(changeMessage) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_headBtn];
+    _headBtn.sd_layout
     .topSpaceToView(self.view,kScreenHeight/10)
     .heightIs(kScreenWidth/4)
     .centerXEqualToView(self.view)
@@ -61,20 +86,20 @@
     nameLabel.textColor = [UIColor whiteColor];
     [self.view addSubview:nameLabel];
     nameLabel.sd_layout
-    .topSpaceToView(headBtn,5)
+    .topSpaceToView(_headBtn,5)
     .widthIs(kScreenWidth/4)
     .heightIs(25)
     .centerXEqualToView(self.view);
     
     
     //成为车主view
-    UIView *carOwnerView = [self createClickViewWith:headBtn withImageName:@"icon_my_cz" withTitle:@"成为车主" withTopFloat:kScreenHeight/10 withLeftToView:self.view];
+    UIView *carOwnerView = [self createClickViewWith:_headBtn withImageName:@"icon_my_cz" withTitle:@"成为车主" withTopFloat:kScreenHeight/10 withLeftToView:self.view];
     //给view添加点击事件
     UITapGestureRecognizer * ownertarget = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(carOwnerViewClick)];
     [carOwnerView addGestureRecognizer:ownertarget];
     
     //我的车队
-    UIView *myCarsView = [self createClickViewWith:headBtn withImageName:@"icon_my_hc" withTitle:@"我的车队" withTopFloat:kScreenHeight/10 withLeftToView:carOwnerView];
+    UIView *myCarsView = [self createClickViewWith:_headBtn withImageName:@"icon_my_hc" withTitle:@"我的车队" withTopFloat:kScreenHeight/10 withLeftToView:carOwnerView];
     UITapGestureRecognizer *carsTarget = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(myCarsViewClick)];
     [myCarsView addGestureRecognizer:carsTarget];
     
@@ -130,6 +155,7 @@
     
     if (![password isEqualToString:@""]) {
         MyMessageVC *vc = [[MyMessageVC alloc]init];
+        vc.headUrl = _photoUrl;
         vc.view.backgroundColor = grayBG;
         [self.navigationController pushViewController:vc animated:YES];
     }else{

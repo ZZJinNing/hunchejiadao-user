@@ -69,13 +69,13 @@
     NSInteger f = 18;//字体大小
     
     UIImageView *topImage = [[UIImageView alloc]init];
-    topImage.backgroundColor = [UIColor redColor];
+    topImage.image = [UIImage imageNamed:@"icon_heng"];
     [self.view addSubview:topImage];
     topImage.sd_layout
     .topSpaceToView(self.view,30)
     .centerXEqualToView(self.view)
-    .heightIs(70)
-    .widthIs(200);
+    .heightIs(55*kScaleWidth)
+    .widthIs(185*kScaleWidth);
     
 #pragma mark--账号部分
     UILabel *label1 = [[UILabel alloc]init];

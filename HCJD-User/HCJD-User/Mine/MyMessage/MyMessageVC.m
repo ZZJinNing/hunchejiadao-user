@@ -24,7 +24,6 @@
     GestureView *_nickNameView;
     
     NSString *_phoneStr;//电话
-    NSString *_photoUrl;//头像图片链接
     NSString *_nameStr;//昵称
 }
 
@@ -54,11 +53,7 @@
     [_downLoad POST:@"userInfo" param:nil success:^(NSDictionary *dic) {
         
         _phoneStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"phone"]];
-        _photoUrl = [NSString stringWithFormat:@"%@",dic[@"return"][@"photo"]];
         _nameStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"name"]];
-        
-        
-        [_headBtn sd_setImageWithURL:[NSURL URLWithString:_photoUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"image"]];
         
         _nameLabel.text = _nameStr;
         _accountView.rightLabel.text = _phoneStr;
@@ -73,7 +68,7 @@
     //头像按钮
     _headBtn = [[UIButton alloc]init];
     [_headBtn setTitle:@"头像" forState:UIControlStateNormal];
-    [_headBtn setImage:[UIImage imageNamed:@"image"] forState:UIControlStateNormal];
+    [_headBtn sd_setImageWithURL:[NSURL URLWithString:self.headUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"image"]];
     _headBtn.layer.cornerRadius = kScreenWidth/8;
     _headBtn.layer.masksToBounds = YES;
     [_headBtn addTarget:self action:@selector(changeHeadImage) forControlEvents:UIControlEventTouchUpInside];
@@ -211,7 +206,7 @@
 -(void)uploadImageActionWith:(NSData *)data withURL:(NSString *)URL{
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:_photoUrl forKey:@"photo"];
+    [param setObject:self.headUrl forKey:@"photo"];
     
     [_downLoad POST:@"updatePhoto" param:param success:^(NSDictionary *dic) {
 
@@ -296,6 +291,7 @@
             
             [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:HCJDName];
             [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:HCJDPhoto];
+            
             LoginVC *vc = [[LoginVC alloc]init];
             vc.view.backgroundColor = grayBG;
             [self presentViewController:vc animated:YES completion:nil];

@@ -326,7 +326,7 @@
             UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"       取消" style:UIAlertActionStyleCancel handler:nil];
             UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [_downLoad POST:@"cartAddGroup" param:param success:^(NSDictionary *dic) {
-                    
+                    //NSLog(@"%@",dic);
                     //修改车队数量
                     NSString *cart_numStr = [NSString stringWithFormat:@"%@",dic[@"return"][@"cart_num"]];
                     NSInteger cartTotal = [cart_numStr integerValue];

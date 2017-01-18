@@ -150,6 +150,9 @@
             [[NSUserDefaults standardUserDefaults] setObject:name forKey:HCJDName];
             [[NSUserDefaults standardUserDefaults] setObject:photoUtl forKey:HCJDPhoto];
             
+            
+            
+            
             //请求获取车队数量
             [self getCartNum];
             

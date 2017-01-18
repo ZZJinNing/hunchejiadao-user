@@ -10,4 +10,6 @@
 
 @interface MyMessageVC : UIViewController
 
+@property (nonatomic,retain) NSString *headUrl;//头像链接
+
 @end

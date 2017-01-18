@@ -11,6 +11,7 @@
 #import "HomeVC.h"
 #import "FindCarVC.h"
 #import "MineVC.h"
+#import "JJHFoundViewController.h"
 
 
 @interface TarbarViewController ()
@@ -30,6 +31,9 @@
     
     MineVC *third = [[MineVC alloc]init];
     [self setupChildVC:third withChildVCTitle:@"我的" withNormalImage:@"icon_w_nor" withSelectedImage:@"icon_w_red"];
+    
+    JJHFoundViewController *forth = [[JJHFoundViewController alloc]init];
+    [self setupChildVC:forth withChildVCTitle:@"发现" withNormalImage:@"icon_find_nor" withSelectedImage:@"icon_find_red"];
     
     //设置tarbar字体的颜色（UIControlState）
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor redColor], NSForegroundColorAttributeName,nil] forState:UIControlStateSelected];

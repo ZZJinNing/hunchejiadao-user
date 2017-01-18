@@ -7,6 +7,7 @@
 //
 
 #import "OrderDetailVC.h"
+#import "WayViewController.h"
 
 @interface OrderDetailVC ()
 
@@ -54,6 +55,7 @@
     
     UILabel *nameLabel = [[UILabel alloc]init];
     nameLabel.text = @"幽魂车";
+    nameLabel.textColor = wordColorDark;
     nameLabel.font = [UIFont systemFontOfSize:15];
     [topView addSubview:nameLabel];
     nameLabel.sd_layout
@@ -64,6 +66,7 @@
     
     UILabel *phoneLabel = [[UILabel alloc]init];
     phoneLabel.text = @"12345678901";
+    phoneLabel.textColor = wordColorDark;
     phoneLabel.font = [UIFont systemFontOfSize:15];
     [topView addSubview:phoneLabel];
     phoneLabel.sd_layout
@@ -73,8 +76,8 @@
     .rightEqualToView(nameLabel);
     
     
-    NSInteger h = 30;
-    NSInteger font = 13;
+    NSInteger h = 40;
+    NSInteger font = 15;
     
     UIView *midView = [[UIView alloc]init];
     midView.backgroundColor = [UIColor whiteColor];
@@ -94,6 +97,7 @@
         leftlabel.frame = CGRectMake(10, h*i, kScreenWidth/2-10, h);
         leftlabel.text = leftArr[i];
         leftlabel.font = [UIFont systemFontOfSize:font];
+        leftlabel.textColor = wordColorDark;
         [midView addSubview:leftlabel];
         
         UILabel *rightLabel = [[UILabel alloc]init];
@@ -101,13 +105,14 @@
         rightLabel.textAlignment = NSTextAlignmentRight;
         rightLabel.text = rightArr[i];
         rightLabel.font = [UIFont systemFontOfSize:font];
+        rightLabel.textColor = wordColorDark;
         [midView addSubview:rightLabel];
     }
     
     
     UIButton *roadButton = [UIButton buttonWithType:UIButtonTypeCustom];
     roadButton.backgroundColor = [UIColor whiteColor];
-    [roadButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+    [roadButton setImage:[UIImage imageNamed:@"icon_map"] forState:UIControlStateNormal];
     [roadButton addTarget:self action:@selector(lookRoadMap) forControlEvents:UIControlEventTouchUpInside];
     [scrollView addSubview:roadButton];
     roadButton.sd_layout
@@ -119,6 +124,7 @@
     UILabel *roadLabel = [[UILabel alloc]init];
     roadLabel.text = @"查看线路";
     roadLabel.backgroundColor = [UIColor whiteColor];
+    roadLabel.textColor = wordColorDark;
     roadLabel.font = [UIFont systemFontOfSize:15];
     [scrollView addSubview:roadLabel];
     roadLabel.sd_layout
@@ -129,6 +135,7 @@
     
     UILabel *tuiKuanLabel = [[UILabel alloc]init];
     tuiKuanLabel.text = @"退款手续费说明";
+    tuiKuanLabel.textColor = wordColorDark;
     tuiKuanLabel.backgroundColor = [UIColor whiteColor];
     tuiKuanLabel.font = [UIFont systemFontOfSize:18];
     tuiKuanLabel.textAlignment = NSTextAlignmentCenter;
@@ -144,7 +151,7 @@
     shuoMingLabel.numberOfLines = 0;
     shuoMingLabel.backgroundColor = [UIColor whiteColor];
     shuoMingLabel.font = [UIFont systemFontOfSize:15];
-    
+    shuoMingLabel.textColor = wordColorDark;
     float labelHeight = [self getHeightWithString:shuoMingLabel.text andWidth:kScreenWidth andLabelTextSize:15];
     
     [scrollView addSubview:shuoMingLabel];
@@ -156,7 +163,7 @@
     
     
     UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancelBtn.backgroundColor = [UIColor redColor];
+    cancelBtn.backgroundColor = kRGB(249, 30, 51);
     [cancelBtn setTitle:@"取消订单" forState:UIControlStateNormal];
     [cancelBtn addTarget:self action:@selector(cancelOrderClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancelBtn];
@@ -192,6 +199,12 @@
 
 # pragma mark -- 查看线路
 - (void)lookRoadMap{
+    
+    WayViewController*wayVC = [[WayViewController alloc]init];
+    wayVC.view.backgroundColor = [UIColor whiteColor];
+    
+    [self.navigationController pushViewController:wayVC animated:YES];
+    
     
 }
 # pragma make -- 取消订单

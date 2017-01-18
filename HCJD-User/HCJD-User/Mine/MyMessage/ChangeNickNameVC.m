@@ -67,7 +67,7 @@
     
     
     UIButton *changeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [changeBtn setTitle:@"确定修改" forState:UIControlStateNormal];
+    [changeBtn setTitle:@"确认修改" forState:UIControlStateNormal];
     changeBtn.backgroundColor = kRGB(249, 30, 51);
     changeBtn.layer.cornerRadius = 3;
     changeBtn.titleLabel.font = [UIFont systemFontOfSize:18];
